@@ -1,0 +1,45 @@
+/* Center the content on the page */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #f7f7f7;
+  }
+  
+  h1 {
+    margin-bottom: 40px;
+    color: #333;
+  }
+  
+  /* Styling for the button group */
+  .button-group {
+    display: flex;
+    gap: 20px;
+  }
+  
+  /* Styling for each button */
+  .home-button {
+    padding: 15px 25px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #00427c;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect for buttons */
+  .home-button:hover {
+    background-color: #003366;
+  }
+  
+  /* Ensure buttons take the same width */
+  .home-button {
+    flex: 1;
+    min-width: 150px;
+  }
+  
