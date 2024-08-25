@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, storage } from './firebase';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
+import './AddTeamMember.css'
 
 function AddTeamMember() {
   const [name, setName] = useState('');
