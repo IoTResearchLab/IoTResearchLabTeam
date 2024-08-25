@@ -1,52 +1,50 @@
 import React, { useState } from 'react';
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from './firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+
+const allowedEmail = "Mostafa.abdelrashid4@gmail.com";
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(true);
 
-  const handleAuth = async (e) => {
+  function signIn(e) {
     e.preventDefault();
-    try {
-      if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
-        alert("Logged in successfully!");
-      } else {
-        await createUserWithEmailAndPassword(auth, email, password);
-        alert("Account created successfully!");
-      }
-    } catch (error) {
-      console.error("Error during authentication:", error);
-      alert("Failed to authenticate. Please try again.");
+    if (email !== allowedEmail) {
+      alert("Access denied: This email is not allowed.");
+      return;
     }
-  };
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        // Grant access
+        console.log("Access granted");
+        // Redirect to the protected area of your app
+      })
+      .catch((error) => {
+        console.error("Error during sign-in:", error);
+        alert("Login failed.");
+      });
+  }
 
   return (
-    <form onSubmit={handleAuth}>
-      <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit">{isLogin ? "Log In" : "Sign Up"}</button>
-      <button type="button" onClick={() => setIsLogin(!isLogin)}>
-        {isLogin ? "Switch to Sign Up" : "Switch to Log In"}
-      </button>
+    <form onSubmit={signIn}>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit">Sign In</button>
     </form>
   );
 }

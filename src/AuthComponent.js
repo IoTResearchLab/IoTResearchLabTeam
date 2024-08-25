@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { auth } from './firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
+const allowedEmail = "your-allowed-email@example.com";  // Replace with your allowed email
+
 function AuthComponent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -9,6 +11,12 @@ function AuthComponent() {
 
   const handleAuth = async (e) => {
     e.preventDefault();
+    
+    if (email !== allowedEmail) {
+      alert("Access denied: This email is not allowed.");
+      return;
+    }
+
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
