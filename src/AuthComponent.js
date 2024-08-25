@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { auth } from './firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
-const allowedEmail = "your-allowed-email@example.com";  // Replace with your allowed email
+const allowedEmail = "Mostafa.abdelrashi4@gmail.com";  // Replace with your allowed email
 
 function AuthComponent() {
   const [email, setEmail] = useState('');
