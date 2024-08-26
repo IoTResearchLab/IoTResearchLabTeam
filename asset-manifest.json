@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/IoTResearchLabTeam/static/css/main.2b931038.css",
+    "main.css": "/IoTResearchLabTeam/static/css/main.b37643f2.css",
     "main.js": "/IoTResearchLabTeam/static/js/main.18edf599.js",
     "index.html": "/IoTResearchLabTeam/index.html",
-    "main.2b931038.css.map": "/IoTResearchLabTeam/static/css/main.2b931038.css.map",
+    "main.b37643f2.css.map": "/IoTResearchLabTeam/static/css/main.b37643f2.css.map",
     "main.18edf599.js.map": "/IoTResearchLabTeam/static/js/main.18edf599.js.map"
   },
   "entrypoints": [
-    "static/css/main.2b931038.css",
+    "static/css/main.b37643f2.css",
     "static/js/main.18edf599.js"
   ]
 }
