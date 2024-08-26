@@ -1,12 +1,14 @@
-/* Center the content on the page */
+/* Ensure the home container fills the entire page */
 .home-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    text-align: center;
+    min-height: 100vh; /* Ensures the container fills at least the full height of the viewport */
+    width: 100%; /* Ensures the container takes the full width of the page */
     background-color: #f7f7f7;
+    padding: 0 20px; /* Padding to prevent content from touching the edges */
+    box-sizing: border-box; /* Ensures padding is included in width and height calculations */
   }
   
   h1 {
@@ -18,6 +20,8 @@
   .button-group {
     display: flex;
     gap: 20px;
+    width: 100%; /* Make the button group fill the width */
+    justify-content: center; /* Center the buttons horizontally */
   }
   
   /* Styling for each button */
@@ -30,16 +34,13 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    flex: 1; /* Allows the buttons to expand to fill available space */
+    max-width: 200px; /* Optional: limit the maximum width of each button */
+    text-align: center;
   }
   
   /* Hover effect for buttons */
   .home-button:hover {
     background-color: #003366;
-  }
-  
-  /* Ensure buttons take the same width */
-  .home-button {
-    flex: 1;
-    min-width: 150px;
   }
   
