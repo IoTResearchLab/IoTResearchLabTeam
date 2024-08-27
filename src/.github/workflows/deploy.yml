@@ -29,3 +29,10 @@ jobs:
 
       - name: Deploy to GitHub Pages
         run: npm run deploy
+      
+      - name: Verify environment variables
+        run: echo "EMAIL=${REACT_APP_ALLOWED_EMAIL}, PASSWORD=${REACT_APP_ALLOWED_PASSWORD}"
+        env:
+          REACT_APP_ALLOWED_EMAIL: ${{ secrets.REACT_APP_ALLOWED_EMAIL }}
+          REACT_APP_ALLOWED_PASSWORD: ${{ secrets.REACT_APP_ALLOWED_PASSWORD }}
+      
