@@ -20,7 +20,6 @@ function Login({ setIsAuthenticated }) {
   };
 
   const authenticateUser = (inputEmail, inputPassword) => {
-    // Replace this with your authentication logic, such as an API call or environment variables
     const allowedEmail = process.env.REACT_APP_ALLOWED_EMAIL;
     const allowedPassword = process.env.REACT_APP_ALLOWED_PASSWORD;
 
