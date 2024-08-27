@@ -1,54 +1,55 @@
+// Login.js
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
-import './AddTeamMember.css';
 
-const allowedEmail = "Mostafa.abdelrashid4@gmail.com";
-
-function Login() {
+function Login({ setIsAuthenticated }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
 
-  function signIn(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (email !== allowedEmail) {
-      alert("Access denied: This email is not allowed.");
-      return;
-    }
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("Access granted");
-        // Redirect to the protected area of your app
-        navigate('/'); // Redirect to home or another route after login
-      })
-      .catch((error) => {
-        console.error("Error during sign-in:", error);
-        alert("Login failed.");
-      });
-  }
+    // You can replace this part with a more secure authentication method
+    if (authenticateUser(email, password)) {
+      setIsAuthenticated(true);
+      navigate('/');
+    } else {
+      alert('Invalid email or password');
+    }
+  };
+
+  const authenticateUser = (inputEmail, inputPassword) => {
+    // Replace this with your authentication logic, such as an API call or environment variables
+    const allowedEmail = process.env.REACT_APP_ALLOWED_EMAIL;
+    const allowedPassword = process.env.REACT_APP_ALLOWED_PASSWORD;
+
+    return inputEmail === allowedEmail && inputPassword === allowedPassword;
+  };
 
   return (
-    <form onSubmit={signIn}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">Sign In</button>
-    </form>
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 }
 
