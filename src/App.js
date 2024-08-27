@@ -1,5 +1,5 @@
-import { Routes, Route,Router, Navigate } from 'react-router-dom';
 import React, { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import AddTeamMember from './AddTeamMember';
 import Navbar from './Navbar';
@@ -12,7 +12,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+    <>
       {isAuthenticated && <Navbar />}
       <Routes>
         {!isAuthenticated ? (
@@ -30,7 +30,7 @@ function App() {
           </>
         )}
       </Routes>
-    </Router>
+    </>
   );
 }
 
