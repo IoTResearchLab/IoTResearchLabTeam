@@ -27,7 +27,6 @@ function App() {
             <Route path="/add-publication" element={<AddPublication />} />
             <Route path="/add-project" element={<AddProject />} />
             <Route path="*" element={<Navigate to="/" />} />
-            
           </>
         )}
       </Routes>
