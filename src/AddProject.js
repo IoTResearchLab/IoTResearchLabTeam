@@ -74,6 +74,7 @@ function AddProject() {
     <div className="add-project-container">
     <form onSubmit={handleSubmit}>
       <div>
+        
         <label>Title:</label>
         <input
           type="text"
