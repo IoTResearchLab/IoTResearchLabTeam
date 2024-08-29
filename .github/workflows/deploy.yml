@@ -23,8 +23,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.name "Your Name"
-          git config --global user.email "you@example.com"
+          git config --global user.name "Mostafa Abdelrashid"
+          git config --global user.email "mostafa.abdelrashid4@gmail.com"
 
       - name: Build the app
         env:
