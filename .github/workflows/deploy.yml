@@ -23,7 +23,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.name "Mostafa Abdelrashid"
+          git config --global user.name "mostafa-abdelrashid"
           git config --global user.email "mostafa.abdelrashid4@gmail.com"
 
       - name: Build the app
