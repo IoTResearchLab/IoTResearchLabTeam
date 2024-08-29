@@ -5,7 +5,7 @@ import './Home.css';  // Import the CSS file for styling
 const Home = () => {
   return (
     <div className="home-container">
-      <h1>This is the Home Page</h1>
+     
       <div className="button-group">
         <Link to="/add-team-member">
           <button className="home-button">Add Team Member</button>
