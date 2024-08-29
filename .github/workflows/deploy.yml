@@ -7,36 +7,46 @@ on:
 
 jobs:
   build:
+    name: Build React App
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
         with:
-          node-version: '20'
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "mostafa-abdelrashid"
-          git config --global user.email "mostafa.abdelrashid4@gmail.com"
-
-      - name: Build the app
+      - name: Build app
         env:
           REACT_APP_ALLOWED_EMAIL: ${{ secrets.REACT_APP_ALLOWED_EMAIL }}
           REACT_APP_ALLOWED_PASSWORD: ${{ secrets.REACT_APP_ALLOWED_PASSWORD }}
         run: npm run build
 
-      - name: Verify environment variables
-        run: echo "EMAIL=${REACT_APP_ALLOWED_EMAIL}, PASSWORD=${REACT_APP_ALLOWED_PASSWORD}"
-        env:
-          REACT_APP_ALLOWED_EMAIL: ${{ secrets.REACT_APP_ALLOWED_EMAIL }}
-          REACT_APP_ALLOWED_PASSWORD: ${{ secrets.REACT_APP_ALLOWED_PASSWORD }}
+      - name: Upload Build Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
 
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
-        run: npm run deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
