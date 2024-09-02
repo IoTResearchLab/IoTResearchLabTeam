@@ -37,7 +37,7 @@ function AddTeamMember() {
       image: imageUrl
     };
 
-    const response = await fetch('https://team-website-backend.fly.dev/addTeamMember', {
+    const response = await fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/addTeamMember', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

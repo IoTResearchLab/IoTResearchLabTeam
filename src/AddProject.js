@@ -50,7 +50,7 @@ function AddProject() {
       publications
     };
 
-    const response = await fetch('https://team-website-backend.fly.dev/addProject', {
+    const response = await fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/addProject', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
