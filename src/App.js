@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-
+import UpdateProject from './UpdateProject';
 import AddTeamMember from './AddTeamMember';
+import UpdateTeamMember from './UpdateTeamMember';
+import Team from './Team'; 
 import Navbar from './Navbar';
 import Home from './Home';
 import AddPublication from './AddPublication';
 import AddProject from './AddProject';
 import Login from './login';
+import Project from './Project';
+import Publication from './Publication';
+import UpdatePublication from './UpdatePublication';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -23,9 +28,16 @@ function App() {
         ) : (
           <>
             <Route path="/" element={<Home />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/project" element={<Project />} /> 
+            <Route path="/publication" element={<Publication/>} /> 
+
             <Route path="/add-team-member" element={<AddTeamMember />} />
+            <Route path="/update-team-member" element={<UpdateTeamMember />} />
             <Route path="/add-publication" element={<AddPublication />} />
+            <Route path="/update-publication" element={<UpdatePublication />} />
             <Route path="/add-project" element={<AddProject />} />
+            <Route path="/update-project" element={<UpdateProject />} /> 
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}

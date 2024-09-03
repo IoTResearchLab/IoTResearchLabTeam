@@ -11,14 +11,14 @@
   }
   
   h1 {
-    margin-bottom: 40px;
-    color: #333;
+    margin-bottom: 100px;
+    color: #00427c;
   }
   
   /* Styling for the button group */
   .button-group {
     display: flex;
-    gap: 20px;
+    gap: 60px;
     width: 100%; /* Make the button group fill the width */
     justify-content: center; /* Center the buttons horizontally */
   }

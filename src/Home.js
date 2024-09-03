@@ -4,17 +4,19 @@ import './Home.css';  // Import the CSS file for styling
 
 const Home = () => {
   return (
-    <div className="home-container">
+    <div >
+
+      <h1>IoT Research Lab Team Website</h1>
      
       <div className="button-group">
-        <Link to="/add-team-member">
-          <button className="home-button">Add Team Member</button>
+        <Link to="/team">
+          <button className="home-button">Team Members</button>
         </Link>
-        <Link to="/add-publication">
-          <button className="home-button">Add Publication</button>
+        <Link to="/publication">
+          <button className="home-button">Publications</button>
         </Link>
-        <Link to="/add-project">
-          <button className="home-button">Add Project</button>
+        <Link to="/project">
+          <button className="home-button">Projects</button>
         </Link>
       </div>
     </div>
