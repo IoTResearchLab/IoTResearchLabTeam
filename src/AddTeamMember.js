@@ -11,6 +11,9 @@ function AddTeamMember() {
   const [imageFile, setImageFile] = useState(null);
   const [user, setUser] = useState(null);
 
+  // Define the available types for the dropdown
+  const teamMemberTypes = ['Alumni','Affiliate Scholars','Intern'];
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -68,7 +71,7 @@ function AddTeamMember() {
         />
       </div>
       <div>
-        <label>Position:</label>
+        <label>Member Info:</label>
         <input
           type="text"
           value={position}
@@ -77,13 +80,19 @@ function AddTeamMember() {
         />
       </div>
       <div>
-        <label>Type:</label>
-        <input
-          type="text"
+        <label>Position:</label>
+        <select
           value={type}
           onChange={(e) => setType(e.target.value)}
           required
-        />
+        >
+          <option value="" disabled>Select type</option>
+          {teamMemberTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
       </div>
       <div>
         <label>Image:</label>

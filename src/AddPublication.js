@@ -4,13 +4,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import './AddTeamMember.css';
 
 function AddPublication() {
-  
   const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
   const [authors, setAuthors] = useState('');
-  const [journal, setJournal] = useState('');
+  const [publisher, setPublisher] = useState('');
   const [year, setYear] = useState('');
-  const [type, setType] = useState('');
-  const [pdfUrl, setPdfUrl] = useState('');
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -30,11 +28,10 @@ function AddPublication() {
 
     const publication = {
       title,
+      url,
       authors,
-      journal,
+      publisher,
       year: parseInt(year),
-      type,
-      pdfUrl
     };
 
     const response = await fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/addPublication', {
@@ -48,11 +45,10 @@ function AddPublication() {
     if (response.ok) {
       alert('Publication added successfully!');
       setTitle('');
+      setUrl('');
       setAuthors('');
-      setJournal('');
+      setPublisher('');
       setYear('');
-      setType('');
-      setPdfUrl('');
     } else {
       alert('Failed to add publication.');
     }
@@ -70,6 +66,15 @@ function AddPublication() {
         />
       </div>
       <div>
+        <label>URL:</label>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          required
+        />
+      </div>
+      <div>
         <label>Authors:</label>
         <input
           type="text"
@@ -79,11 +84,11 @@ function AddPublication() {
         />
       </div>
       <div>
-        <label>Journal:</label>
+        <label>Publisher:</label>
         <input
           type="text"
-          value={journal}
-          onChange={(e) => setJournal(e.target.value)}
+          value={publisher}
+          onChange={(e) => setPublisher(e.target.value)}
           required
         />
       </div>
@@ -93,24 +98,6 @@ function AddPublication() {
           type="number"
           value={year}
           onChange={(e) => setYear(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Type:</label>
-        <input
-          type="text"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>PDF URL:</label>
-        <input
-          type="text"
-          value={pdfUrl}
-          onChange={(e) => setPdfUrl(e.target.value)}
           required
         />
       </div>

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from './firebase';
 import { onAuthStateChanged } from "firebase/auth";
+import './UpdatePublication.css'; // Import the CSS file
 
 function UpdatePublication() {
   const [publications, setPublications] = useState([]);
   const [selectedPublication, setSelectedPublication] = useState(null);
   const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
   const [authors, setAuthors] = useState('');
-  const [journal, setJournal] = useState('');
+  const [publisher, setPublisher] = useState('');
   const [year, setYear] = useState('');
-  const [type, setType] = useState('');
-  const [pdfUrl, setPdfUrl] = useState('');
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -32,11 +32,10 @@ function UpdatePublication() {
     const publication = publications.find(p => p._id === publicationId);
     setSelectedPublication(publication);
     setTitle(publication.title);
+    setUrl(publication.url);
     setAuthors(publication.authors);
-    setJournal(publication.journal);
+    setPublisher(publication.publisher);
     setYear(publication.year);
-    setType(publication.type);
-    setPdfUrl(publication.pdfUrl);
   };
 
   const handleUpdate = async (e) => {
@@ -49,11 +48,10 @@ function UpdatePublication() {
 
     const updatedPublication = {
       title,
+      url,
       authors,
-      journal,
+      publisher,
       year: parseInt(year),
-      type,
-      pdfUrl
     };
 
     try {
@@ -105,6 +103,15 @@ function UpdatePublication() {
             />
           </div>
           <div>
+            <label>URL:</label>
+            <input
+              type="text"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              required
+            />
+          </div>
+          <div>
             <label>Authors:</label>
             <input
               type="text"
@@ -114,11 +121,11 @@ function UpdatePublication() {
             />
           </div>
           <div>
-            <label>Journal:</label>
+            <label>Publisher:</label>
             <input
               type="text"
-              value={journal}
-              onChange={(e) => setJournal(e.target.value)}
+              value={publisher}
+              onChange={(e) => setPublisher(e.target.value)}
               required
             />
           </div>
@@ -128,24 +135,6 @@ function UpdatePublication() {
               type="number"
               value={year}
               onChange={(e) => setYear(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Type:</label>
-            <input
-              type="text"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>PDF URL:</label>
-            <input
-              type="text"
-              value={pdfUrl}
-              onChange={(e) => setPdfUrl(e.target.value)}
               required
             />
           </div>
