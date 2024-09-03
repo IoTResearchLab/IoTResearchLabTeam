@@ -31,7 +31,6 @@ function App() {
             <Route path="/team" element={<Team />} />
             <Route path="/project" element={<Project />} /> 
             <Route path="/publication" element={<Publication/>} /> 
-
             <Route path="/add-team-member" element={<AddTeamMember />} />
             <Route path="/update-team-member" element={<UpdateTeamMember />} />
             <Route path="/add-publication" element={<AddPublication />} />
