@@ -1,15 +1,14 @@
-/* Container for the update publication form */
-.update-publication-container {
-    max-width: 800px;
+/* Container for the update team member form */
+.update-team-member {
+    max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
   /* Headings */
-  .update-publication-container h3 {
+  .update-team-member h3 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
@@ -17,30 +16,36 @@
   }
   
   /* Form labels */
-  .update-publication-container label {
+  .update-team-member label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #555;
+    color: #00427c;
   }
   
-  /* Form inputs and textareas */
-  .update-publication-container input[type="text"],
-  .update-publication-container input[type="number"],
-  .update-publication-container select {
+  /* Form inputs */
+  .update-team-member input[type="text"],
+  .update-team-member input[type="file"],
+  .update-team-member select {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-    color: #00427c
+    color: #333;
+  }
+  
+  /* Image preview styling */
+  .update-team-member img {
+    display: block;
+    margin-top: 10px;
+    border-radius: 4px;
   }
   
   /* Button styles */
-  .update-publication-container button {
+  .update-team-member button {
     padding: 10px 20px;
-    margin-right: 10px;
     background-color: #00427c;
     color: white;
     border: none;
@@ -49,21 +54,21 @@
     cursor: pointer;
   }
   
-  .update-publication-container button:hover {
+  .update-team-member button:hover {
     background-color: grey;
   }
   
-  /* Responsive behavior */
+  /* Responsive design */
   @media (max-width: 600px) {
-    .update-publication-container {
+    .update-team-member {
       padding: 10px;
     }
   
-    .update-publication-container h3 {
+    .update-team-member h3 {
       font-size: 20px;
     }
   
-    .update-publication-container button {
+    .update-team-member button {
       width: 100%;
       margin: 10px 0;
     }

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { storage } from './firebase';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import './AddTeamMember.css'
-
+import './UpdateTeamMember.css'; // Import the CSS file
 
 function UpdateTeamMember() {
   const [teamMembers, setTeamMembers] = useState([]);
