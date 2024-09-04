@@ -103,7 +103,7 @@ function UpdatePublication() {
             />
           </div>
           <div>
-            <label>URL:</label>
+            <label>Publication URL:</label>
             <input
               type="text"
               value={url}

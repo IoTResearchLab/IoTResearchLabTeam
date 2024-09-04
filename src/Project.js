@@ -17,8 +17,8 @@ function Project() {
   return (
     <div className="team-management">
       <h2>Projects Page</h2>
-      <button onClick={handleAddProjectClick} className="btn">Add Project</button>
-      <button onClick={handleUpdateProjectClick} className="btn">Update Project</button>
+      <button onClick={handleAddProjectClick} className="btn">Add Project Page</button>
+      <button onClick={handleUpdateProjectClick} className="btn">Update Project Page</button>
     </div>
   );
 }
