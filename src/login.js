@@ -1,6 +1,8 @@
 // Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './AddTeamMember.css';
+
 
 function Login({ setIsAuthenticated }) {
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ function Login({ setIsAuthenticated }) {
   };
 
   return (
-    <div>
+    <div className="add-teammember-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
