@@ -60,7 +60,9 @@ function AddTeamMember() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="add-teammember-container">
+
+ <form onSubmit={handleSubmit}>
       <div>
         <label>Name:</label>
         <input
@@ -106,6 +108,7 @@ function AddTeamMember() {
       </div>
       <button type="submit" disabled={!user}>Add Team Member</button>
     </form>
+    </div>
   );
 }
 

@@ -55,6 +55,8 @@ function AddPublication() {
   };
 
   return (
+    <div className="add-teammember-container">
+
     <form onSubmit={handleSubmit}>
       <div>
         <label>Title:</label>
@@ -103,6 +105,7 @@ function AddPublication() {
       </div>
       <button type="submit" disabled={!user}>Add Publication</button>
     </form>
+    </div>
   );
 }
 
