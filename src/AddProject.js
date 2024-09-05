@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // import { auth } from './firebase'; // Firebase configuration
 // import { onAuthStateChanged } from "firebase/auth";
 import { storage } from './firebase'; // Firebase storage
