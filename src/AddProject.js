@@ -78,10 +78,10 @@ function AddProject() {
     e.preventDefault();
     setUploading(true);
 
-    if (!user) {
-      alert('You must be logged in to add a project.');
-      return;
-    }
+    // if (!user) {
+    //   alert('You must be logged in to add a project.');
+    //   return;
+    // }
 
     const formData = new FormData();
     formData.append('title', title);
