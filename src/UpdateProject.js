@@ -235,7 +235,7 @@ function UpdateProject() {
                   onChange={(e) => handlePublicationChange(index, 'title', e.target.value)}
                 />
                 <input
-                  type="url"
+                  type="text"
                   placeholder="URL"
                   value={publication.url}
                   onChange={(e) => handlePublicationChange(index, 'url', e.target.value)}
@@ -247,7 +247,8 @@ function UpdateProject() {
                   onChange={(e) => handlePublicationChange(index, 'authors', e.target.value)}
                 />
                 <input
-                  type="date"
+                  type="text"
+                  placeholder='Year of Publication'
                   value={publication.date}
                   onChange={(e) => handlePublicationChange(index, 'date', e.target.value)}
                 />

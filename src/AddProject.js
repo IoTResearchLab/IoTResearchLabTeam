@@ -136,7 +136,24 @@ function AddProject() {
 
   return (
     <div className="add-project-container">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}> 
+         <div>
+          <label>Project Name:</label>
+          <input
+            type="text"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+            required
+          />
+        </div>  <div>
+          <label>Main Image:</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleMainImageUpload(e.target.files[0])}
+          />
+          {imgSrc && <img src={imgSrc} alt="Main project" width="100" />}
+        </div>
         <div>
           <label>Title:</label>
           <input
@@ -146,15 +163,7 @@ function AddProject() {
             required
           />
         </div>
-        <div>
-          <label>Project Name:</label>
-          <input
-            type="text"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-            required
-          />
-        </div>
+      
         <div>
           <label>Introduction:</label>
           <textarea
@@ -191,7 +200,7 @@ function AddProject() {
                 onChange={(e) => handlePublicationChange(index, 'title', e.target.value)}
               />
               <input
-                type="url"
+                type="text"
                 placeholder="URL"
                 value={publication.url}
                 onChange={(e) => handlePublicationChange(index, 'url', e.target.value)}
@@ -203,7 +212,8 @@ function AddProject() {
                 onChange={(e) => handlePublicationChange(index, 'authors', e.target.value)}
               />
               <input
-                type="date"
+                type="text"
+                placeholder='Date'
                 value={publication.date}
                 onChange={(e) => handlePublicationChange(index, 'date', e.target.value)}
               />
@@ -212,15 +222,7 @@ function AddProject() {
           ))}
           <button type="button" onClick={handleAddPublication}>Add Publication</button>
         </div>
-        <div>
-          <label>Main Image:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleMainImageUpload(e.target.files[0])}
-          />
-          {imgSrc && <img src={imgSrc} alt="Main project" width="100" />}
-        </div>
+      
         <div>
           <label>Paragraphs:</label>
           {paragraphs.map((paragraph, index) => (
