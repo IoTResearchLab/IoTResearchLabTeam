@@ -6,11 +6,14 @@ import './UpdateProject.css'; // Import the CSS file
 function UpdateProject() {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [title, setTitle] = useState('');
-  const [introduction, setIntroduction] = useState('');
-  const [paragraphs, setParagraphs] = useState([{ title: '', paragraph: '', img: '' }]); // Default values
-  const [slug, setSlug] = useState('');
-  const [publications, setPublications] = useState('');
+  const [title, setTitle] = useState(''); // Not required
+  const [projectName, setProjectName] = useState(''); // Required
+  const [introduction, setIntroduction] = useState(''); // Not required
+  const [paragraphs, setParagraphs] = useState([{ title: '', paragraph: '', img: '' }]); // Default values, not required
+  const [slug, setSlug] = useState(''); // Required
+  const [publications, setPublications] = useState(''); // Not required
+  const [type, setType] = useState(null); // Not required
+  const [imgSrc, setImgSrc] = useState(''); // Required
   const [user, setUser] = useState(null);
   const [uploading, setUploading] = useState(false); // Track upload state
 
@@ -35,6 +38,7 @@ function UpdateProject() {
     // Set the fields with the project data or default to empty strings
     setSelectedProject(project);
     setTitle(project?.title || ''); // Default to empty string if not present
+    setProjectName(project?.projectName || ''); // Required field
     setIntroduction(project?.introduction || '');
     setParagraphs(
       project?.paragraphs?.map(p => ({
@@ -43,8 +47,10 @@ function UpdateProject() {
         img: p?.img || ''
       })) || [{ title: '', paragraph: '', img: '' }] // Default paragraph structure
     );
-    setSlug(project?.slug || '');
+    setSlug(project?.slug || ''); // Required field
     setPublications(project?.publications || '');
+    setType(project?.type ?? null); // Set type if it exists or is null
+    setImgSrc(project?.imgSrc || ''); // Required field
   };
 
   const handleAddParagraph = () => {
@@ -77,26 +83,40 @@ function UpdateProject() {
       return;
     }
 
+    // Ensure required fields are filled
+    if (!projectName || !slug || !imgSrc) {
+      alert('Please fill in the required fields: Project Name, Slug, and Main Image.');
+      return;
+    }
+
     setUploading(true);
 
     // Ensure all fields default to empty strings if not filled
     const updatedProject = {
-      title: title || '',
-      introduction: introduction || '',
-      slug: slug || '',
-      publications: publications || '',
+      projectName: projectName || '',
+      title: title || '', // Optional field
+      introduction: introduction || '', // Optional field
+      slug: slug || '', // Required field
+      imgSrc: imgSrc || '', // Required field
+      publications: publications || '', // Optional field
+      type: type, // Optional field
       paragraphs: paragraphs.map(p => ({
-        title: p.title || '',
-        paragraph: p.paragraph || '',
-        img: typeof p.img === 'string' ? p.img : '' // Default to empty string if no image or not a string
+        title: p.title || '', // Optional field
+        paragraph: p.paragraph || '', // Optional field
+        img: typeof p.img === 'string' ? p.img : '' // Optional field, empty string if no image or not a string
       }))
     };
 
     const formData = new FormData();
+    formData.append('projectName', updatedProject.projectName);
     formData.append('title', updatedProject.title);
     formData.append('introduction', updatedProject.introduction);
     formData.append('slug', updatedProject.slug);
+    formData.append('imgSrc', updatedProject.imgSrc);
     formData.append('publications', updatedProject.publications);
+    if (type !== null) {
+      formData.append('type', updatedProject.type); // Append type only if present
+    }
     formData.append('paragraphs', JSON.stringify(updatedProject.paragraphs));
 
     // Append any newly selected images (Files) to the form data
@@ -135,8 +155,9 @@ function UpdateProject() {
         <select onChange={handleSelectChange} value={selectedProject ? selectedProject._id : ''}>
           <option value="" disabled>Select...</option>
           {projects.map(project => (
-            <option key={project._id} value={project._id}>
+            <option key={project._id} value={project._id}>            
               {project.title}
+
             </option>
           ))}
         </select>
@@ -145,12 +166,40 @@ function UpdateProject() {
       {selectedProject && (
         <form onSubmit={handleUpdate}>
           <div>
+            <label>Project Name (Required):</label>
+            <input
+              type="text"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value || '')}
+              required
+            />
+          </div>
+          <div>
+            <label>Slug (Required):</label>
+            <input
+              type="text"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value || '')}
+              required
+            />
+          </div>
+          <div>
+            <label>Main Image (Required):</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImgSrc(URL.createObjectURL(e.target.files[0]))}
+              required
+            />
+            {/* Display a meaningful alt text or remove the alt attribute if it's decorative */}
+            {imgSrc && <img src={imgSrc} width="300" alt={projectName ? projectName : 'Main project image'} />}
+          </div>
+          <div>
             <label>Title:</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value || '')}
-              required
             />
           </div>
           <div>
@@ -158,16 +207,6 @@ function UpdateProject() {
             <textarea
               value={introduction}
               onChange={(e) => setIntroduction(e.target.value || '')}
-              required
-            />
-          </div>
-          <div>
-            <label>Slug:</label>
-            <input
-              type="text"
-              value={slug}
-              onChange={(e) => setSlug(e.target.value || '')}
-              required
             />
           </div>
           <div>
@@ -178,6 +217,20 @@ function UpdateProject() {
               onChange={(e) => setPublications(e.target.value || '')}
             />
           </div>
+
+          {/* Conditionally render the type dropdown if the project has a type field or it's set to null */}
+          {type !== undefined && (
+            <div>
+              <label>Type:</label>
+              <select value={type || ''} onChange={(e) => setType(e.target.value)}>
+                <option value="">Select a type</option>
+                <option value="health">Health</option>
+                <option value="smart mobility">Smart Mobility</option>
+                <option value="infrastructure">Infrastructure</option>
+              </select>
+            </div>
+          )}
+
           <div>
             <label>Paragraphs:</label>
             {paragraphs.map((paragraph, index) => (
@@ -206,9 +259,9 @@ function UpdateProject() {
                   />
                   {/* If img is a File, show the preview, otherwise show the URL from MongoDB */}
                   {paragraph.img instanceof File ? (
-                    <img src={URL.createObjectURL(paragraph.img)} width="300" alt="Selected" />
+                    <img src={URL.createObjectURL(paragraph.img)} width="300" alt={paragraph.title ? paragraph.title : `Paragraph ${index + 1}`} />
                   ) : (
-                    paragraph.img && <img src={paragraph.img} width="300" alt="Existing" />
+                    paragraph.img && <img src={paragraph.img} width="300" alt={paragraph.title ? paragraph.title : `Paragraph ${index + 1}`} />
                   )}
                 </div>
                 <button type="button" onClick={() => handleRemoveParagraph(index)}>Remove Paragraph</button>
