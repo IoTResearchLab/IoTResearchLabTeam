@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from './firebase'; // Import Firebase configuration
-import { onAuthStateChanged } from "firebase/auth";
+
 import './UpdateProject.css'; // Import the CSS file
 
 function UpdateProject() {
@@ -14,15 +13,14 @@ function UpdateProject() {
   const [publications, setPublications] = useState([{ title: '', url: '', authors: '', date: '' }]); // Publications array
   const [type, setType] = useState(null); // Optional
   const [imgSrc, setImgSrc] = useState(''); // Required
-  const [user, setUser] = useState(null);
   const [uploading, setUploading] = useState(false); // Track upload state
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-    return unsubscribe;
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     setUser(user);
+  //   });
+  //   return unsubscribe;
+  // }, []);
 
   useEffect(() => {
     fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/projects')
@@ -94,11 +92,7 @@ function UpdateProject() {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    if (!user) {
-      alert('You must be logged in to update a project.');
-      return;
-    }
-
+  
     // Ensure required fields are filled
     if (!projectName || !slug || !imgSrc) {
       alert('Please fill in the required fields: Project Name, Slug, and Main Image.');
