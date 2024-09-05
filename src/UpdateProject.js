@@ -6,13 +6,13 @@ import './UpdateProject.css'; // Import the CSS file
 function UpdateProject() {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [title, setTitle] = useState(''); // Not required
+  const [title, setTitle] = useState(''); // Optional
   const [projectName, setProjectName] = useState(''); // Required
-  const [introduction, setIntroduction] = useState(''); // Not required
+  const [introduction, setIntroduction] = useState(''); // Optional
   const [paragraphs, setParagraphs] = useState([{ title: '', paragraph: '', img: '' }]); // Default values, not required
   const [slug, setSlug] = useState(''); // Required
-  const [publications, setPublications] = useState(''); // Not required
-  const [type, setType] = useState(null); // Not required
+  const [publications, setPublications] = useState([{ title: '', url: '', authors: '', date: '' }]); // Publications array
+  const [type, setType] = useState(null); // Optional
   const [imgSrc, setImgSrc] = useState(''); // Required
   const [user, setUser] = useState(null);
   const [uploading, setUploading] = useState(false); // Track upload state
@@ -37,9 +37,9 @@ function UpdateProject() {
 
     // Set the fields with the project data or default to empty strings
     setSelectedProject(project);
-    setTitle(project?.title || ''); // Default to empty string if not present
-    setProjectName(project?.projectName || ''); // Required field
-    setIntroduction(project?.introduction || '');
+    setTitle(project?.title || ''); // Optional
+    setProjectName(project?.projectName || ''); // Required
+    setIntroduction(project?.introduction || ''); // Optional
     setParagraphs(
       project?.paragraphs?.map(p => ({
         title: p?.title || '', // Default to empty string if title is missing
@@ -47,10 +47,10 @@ function UpdateProject() {
         img: p?.img || ''
       })) || [{ title: '', paragraph: '', img: '' }] // Default paragraph structure
     );
-    setSlug(project?.slug || ''); // Required field
-    setPublications(project?.publications || '');
+    setSlug(project?.slug || ''); // Required
+    setPublications(project?.publications || [{ title: '', url: '', authors: '', date: '' }]);
     setType(project?.type ?? null); // Set type if it exists or is null
-    setImgSrc(project?.imgSrc || ''); // Required field
+    setImgSrc(project?.imgSrc || ''); // Required
   };
 
   const handleAddParagraph = () => {
@@ -73,6 +73,22 @@ function UpdateProject() {
     const newParagraphs = paragraphs.slice();
     newParagraphs.splice(index, 1);
     setParagraphs(newParagraphs);
+  };
+
+  const handleAddPublication = () => {
+    setPublications([...publications, { title: '', url: '', authors: '', date: '' }]);
+  };
+
+  const handlePublicationChange = (index, field, value) => {
+    const newPublications = [...publications];
+    newPublications[index][field] = value;
+    setPublications(newPublications);
+  };
+
+  const handleRemovePublication = (index) => {
+    const newPublications = [...publications];
+    newPublications.splice(index, 1);
+    setPublications(newPublications);
   };
 
   const handleUpdate = async (e) => {
@@ -113,7 +129,7 @@ function UpdateProject() {
     formData.append('introduction', updatedProject.introduction);
     formData.append('slug', updatedProject.slug);
     formData.append('imgSrc', updatedProject.imgSrc);
-    formData.append('publications', updatedProject.publications);
+    formData.append('publications', JSON.stringify(updatedProject.publications));
     if (type !== null) {
       formData.append('type', updatedProject.type); // Append type only if present
     }
@@ -155,9 +171,8 @@ function UpdateProject() {
         <select onChange={handleSelectChange} value={selectedProject ? selectedProject._id : ''}>
           <option value="" disabled>Select...</option>
           {projects.map(project => (
-            <option key={project._id} value={project._id}>            
+            <option key={project._id} value={project._id}>
               {project.title}
-
             </option>
           ))}
         </select>
@@ -211,11 +226,35 @@ function UpdateProject() {
           </div>
           <div>
             <label>Publications:</label>
-            <input
-              type="text"
-              value={publications}
-              onChange={(e) => setPublications(e.target.value || '')}
-            />
+            {publications.map((publication, index) => (
+              <div key={index} className="publication-section">
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={publication.title}
+                  onChange={(e) => handlePublicationChange(index, 'title', e.target.value)}
+                />
+                <input
+                  type="url"
+                  placeholder="URL"
+                  value={publication.url}
+                  onChange={(e) => handlePublicationChange(index, 'url', e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="Authors"
+                  value={publication.authors}
+                  onChange={(e) => handlePublicationChange(index, 'authors', e.target.value)}
+                />
+                <input
+                  type="date"
+                  value={publication.date}
+                  onChange={(e) => handlePublicationChange(index, 'date', e.target.value)}
+                />
+                <button type="button" onClick={() => handleRemovePublication(index)}>Remove</button>
+              </div>
+            ))}
+            <button type="button" onClick={handleAddPublication}>Add Publication</button>
           </div>
 
           {/* Conditionally render the type dropdown if the project has a type field or it's set to null */}

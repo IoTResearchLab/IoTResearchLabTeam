@@ -12,7 +12,7 @@ function AddProject() {
   const [type, setType] = useState('health'); // Dropdown for type selection
   const [paragraphs, setParagraphs] = useState([{ title: '', paragraph: '', img: null }]);
   const [slug, setSlug] = useState('');
-  const [publications, setPublications] = useState('');
+  const [publications, setPublications] = useState([{ title: '', url: '', authors: '', date: '' }]); // Publications array
   const [imgSrc, setImgSrc] = useState(''); // To store the Firebase URL for the main image
   const [user, setUser] = useState(null);
   const [uploading, setUploading] = useState(false); // For showing uploading status
@@ -23,6 +23,24 @@ function AddProject() {
     });
     return unsubscribe;
   }, []);
+
+  // Add a new publication
+  const handleAddPublication = () => {
+    setPublications([...publications, { title: '', url: '', authors: '', date: '' }]);
+  };
+
+  // Handle changes in publications
+  const handlePublicationChange = (index, field, value) => {
+    const newPublications = [...publications];
+    newPublications[index][field] = value;
+    setPublications(newPublications);
+  };
+
+  const handleRemovePublication = (index) => {
+    const newPublications = [...publications];
+    newPublications.splice(index, 1);
+    setPublications(newPublications);
+  };
 
   const handleAddParagraph = () => {
     setParagraphs([...paragraphs, { title: '', paragraph: '', img: null }]);
@@ -71,7 +89,6 @@ function AddProject() {
     formData.append('introduction', introduction);
     formData.append('type', type); // Include the selected type in the submission
     formData.append('slug', slug);
-    formData.append('publications', publications);
     formData.append('imgSrc', imgSrc); // Add the Firebase image URL to the form
 
     // Add paragraphs data and images to FormData
@@ -80,6 +97,9 @@ function AddProject() {
       paragraph: p.paragraph,
       img: p.img ? '' : p.img // We'll handle the image files separately
     }))));
+
+    // Add publications data to FormData
+    formData.append('publications', JSON.stringify(publications));
 
     paragraphs.forEach((paragraph, index) => {
       if (paragraph.img) {
@@ -101,7 +121,7 @@ function AddProject() {
         setType('health'); // Reset type to default
         setParagraphs([{ title: '', paragraph: '', img: null }]);
         setSlug('');
-        setPublications('');
+        setPublications([{ title: '', url: '', authors: '', date: '' }]);
         setImgSrc(''); // Reset imgSrc
       } else {
         alert('Failed to add project.');
@@ -162,11 +182,35 @@ function AddProject() {
         </div>
         <div>
           <label>Publications:</label>
-          <input
-            type="text"
-            value={publications}
-            onChange={(e) => setPublications(e.target.value)}
-          />
+          {publications.map((publication, index) => (
+            <div key={index} className="publication-section">
+              <input
+                type="text"
+                placeholder="Title"
+                value={publication.title}
+                onChange={(e) => handlePublicationChange(index, 'title', e.target.value)}
+              />
+              <input
+                type="url"
+                placeholder="URL"
+                value={publication.url}
+                onChange={(e) => handlePublicationChange(index, 'url', e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Authors"
+                value={publication.authors}
+                onChange={(e) => handlePublicationChange(index, 'authors', e.target.value)}
+              />
+              <input
+                type="date"
+                value={publication.date}
+                onChange={(e) => handlePublicationChange(index, 'date', e.target.value)}
+              />
+              <button type="button" onClick={() => handleRemovePublication(index)}>Remove</button>
+            </div>
+          ))}
+          <button type="button" onClick={handleAddPublication}>Add Publication</button>
         </div>
         <div>
           <label>Main Image:</label>
