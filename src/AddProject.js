@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from './firebase'; // Firebase configuration
-import { onAuthStateChanged } from "firebase/auth";
+// import { auth } from './firebase'; // Firebase configuration
+// import { onAuthStateChanged } from "firebase/auth";
 import { storage } from './firebase'; // Firebase storage
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import './AddProject.css';
@@ -14,15 +14,15 @@ function AddProject() {
   const [slug, setSlug] = useState('');
   const [publications, setPublications] = useState([{ title: '', url: '', authors: '', date: '' }]); // Publications array
   const [imgSrc, setImgSrc] = useState(''); // To store the Firebase URL for the main image
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [uploading, setUploading] = useState(false); // For showing uploading status
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-    return unsubscribe;
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     setUser(user);
+  //   });
+  //   return unsubscribe;
+  // }, []);
 
   // Add a new publication
   const handleAddPublication = () => {
@@ -255,7 +255,7 @@ function AddProject() {
           ))}
           <button type="button" onClick={handleAddParagraph}>Add Paragraph</button>
         </div>
-        <button type="submit" disabled={uploading || !user}>
+        <button type="submit" disabled={uploading }>
           {uploading ? 'Uploading...' : 'Add Project'}
         </button>
       </form>
