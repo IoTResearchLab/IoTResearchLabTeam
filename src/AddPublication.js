@@ -103,7 +103,7 @@ function AddPublication() {
           required
         />
       </div>
-      <button type="submit" disabled={!user}>Add Publication</button>
+      <button type="submit" >Add Publication</button>
     </form>
     </div>
   );

@@ -309,7 +309,7 @@ function UpdateProject() {
             ))}
             <button type="button" onClick={handleAddParagraph}>Add Paragraph</button>
           </div>
-          <button type="submit" disabled={!user || uploading}>
+          <button type="submit" disabled={ uploading}>
             {uploading ? 'Updating...' : 'Update Project'}
           </button>
         </form>

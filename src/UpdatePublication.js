@@ -138,7 +138,7 @@ function UpdatePublication() {
               required
             />
           </div>
-          <button type="submit" disabled={!user}>Update Publication</button>
+          <button type="submit" >Update Publication</button>
         </form>
       )}
     </div>
