@@ -48,7 +48,7 @@ function UpdateProject() {
       })) || [{ title: '', paragraph: '', img: '' }] // Default paragraph structure
     );
     setSlug(project?.slug || ''); // Required
-    setPublications(project?.publications || [{ title: '', url: '', authors: '', date: '' }]);
+    setPublications(Array.isArray(project?.publications) ? project.publications : [{ title: '', url: '', authors: '', date: '' }]);
     setType(project?.type ?? null); // Set type if it exists or is null
     setImgSrc(project?.imgSrc || ''); // Required
   };
