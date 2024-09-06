@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import './UpdateProject.css'; // Import the CSS file
 
 function UpdateProject() {
@@ -8,19 +7,12 @@ function UpdateProject() {
   const [title, setTitle] = useState(''); // Optional
   const [projectName, setProjectName] = useState(''); // Required
   const [introduction, setIntroduction] = useState(''); // Optional
-  const [paragraphs, setParagraphs] = useState([{ title: '', paragraph: '', img: '' }]); // Default values, not required
+  const [paragraphs, setParagraphs] = useState([{ title: '', paragraph: '', img: '' }]); // Default values
   const [slug, setSlug] = useState(''); // Required
   const [publications, setPublications] = useState([{ title: '', url: '', authors: '', date: '' }]); // Publications array
   const [type, setType] = useState(null); // Optional
   const [imgSrc, setImgSrc] = useState(''); // Required
   const [uploading, setUploading] = useState(false); // Track upload state
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     setUser(user);
-  //   });
-  //   return unsubscribe;
-  // }, []);
 
   useEffect(() => {
     fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/projects')
@@ -33,37 +25,36 @@ function UpdateProject() {
     const projectId = e.target.value;
     const project = projects.find(p => p._id === projectId);
 
-    // Set the fields with the project data or default to empty strings
     setSelectedProject(project);
-    setTitle(project?.title || ''); // Optional
-    setProjectName(project?.projectName || ''); // Required
-    setIntroduction(project?.introduction || ''); // Optional
+    setTitle(project?.title || ''); 
+    setProjectName(project?.projectName || ''); 
+    setIntroduction(project?.introduction || ''); 
     setParagraphs(
       project?.paragraphs?.map(p => ({
-        title: p?.title || '', // Default to empty string if title is missing
+        title: p?.title || '', 
         paragraph: p?.paragraph || '',
         img: p?.img || ''
-      })) || [{ title: '', paragraph: '', img: '' }] // Default paragraph structure
+      })) || [{ title: '', paragraph: '', img: '' }] 
     );
-    setSlug(project?.slug || ''); // Required
+    setSlug(project?.slug || ''); 
     setPublications(Array.isArray(project?.publications) ? project.publications : [{ title: '', url: '', authors: '', date: '' }]);
-    setType(project?.type ?? null); // Set type if it exists or is null
-    setImgSrc(project?.imgSrc || ''); // Required
+    setType(project?.type ?? null); 
+    setImgSrc(project?.imgSrc || ''); 
   };
 
   const handleAddParagraph = () => {
-    setParagraphs([...paragraphs, { title: '', paragraph: '', img: '' }]); // Add a new empty paragraph
+    setParagraphs([...paragraphs, { title: '', paragraph: '', img: '' }]);
   };
 
   const handleParagraphChange = (index, field, value) => {
     const newParagraphs = paragraphs.slice();
-    newParagraphs[index][field] = value || ''; // Default to empty string if no value provided
+    newParagraphs[index][field] = value || ''; 
     setParagraphs(newParagraphs);
   };
 
   const handleFileChange = (index, file) => {
     const newParagraphs = [...paragraphs];
-    newParagraphs[index].img = file || ''; // Default to empty string if no file selected
+    newParagraphs[index].img = file; // Store the File object
     setParagraphs(newParagraphs);
   };
 
@@ -92,59 +83,52 @@ function UpdateProject() {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-  
-    // Ensure required fields are filled
-    if (!projectName || !slug || !imgSrc) {
-      alert('Please fill in the required fields: Project Name, Slug, and Main Image.');
+    if (!projectName || !slug) {
+      alert('Please fill in the required fields: Project Name and Slug.');
       return;
     }
 
     setUploading(true);
 
-    // Ensure all fields default to empty strings if not filled
-    const updatedProject = {
-      projectName: projectName || '',
-      title: title || '', // Optional field
-      introduction: introduction || '', // Optional field
-      slug: slug || '', // Required field
-      imgSrc: imgSrc || '', // Required field
-      publications: publications || '', // Optional field
-      type: type, // Optional field
-      paragraphs: paragraphs.map(p => ({
-        title: p.title || '', // Optional field
-        paragraph: p.paragraph || '', // Optional field
-        img: typeof p.img === 'string' ? p.img : '' // Optional field, empty string if no image or not a string
-      }))
-    };
-
     const formData = new FormData();
-    formData.append('projectName', updatedProject.projectName);
-    formData.append('title', updatedProject.title);
-    formData.append('introduction', updatedProject.introduction);
-    formData.append('slug', updatedProject.slug);
-    formData.append('imgSrc', updatedProject.imgSrc);
-    formData.append('publications', JSON.stringify(updatedProject.publications));
-    if (type !== null) {
-      formData.append('type', updatedProject.type); // Append type only if present
-    }
-    formData.append('paragraphs', JSON.stringify(updatedProject.paragraphs));
+    formData.append('projectName', projectName);
+    formData.append('title', title || ''); 
+    formData.append('introduction', introduction || ''); 
+    formData.append('slug', slug || ''); 
 
-    // Append any newly selected images (Files) to the form data
+    // Append main image file if there is one
+    if (imgSrc instanceof File) {
+      formData.append('imgSrc', imgSrc); 
+    } else {
+      formData.append('imgSrc', imgSrc || ''); 
+    }
+
+    formData.append('publications', JSON.stringify(publications));
+    if (type !== null) {
+      formData.append('type', type);
+    }
+
     paragraphs.forEach((paragraph, index) => {
+      formData.append(`paragraphs[${index}][title]`, paragraph.title || '');
+      formData.append(`paragraphs[${index}][paragraph]`, paragraph.paragraph || '');
+
+      // Append file if it's a new image, otherwise append the existing URL
       if (paragraph.img instanceof File) {
-        formData.append('images', paragraph.img); // Add the image file to the form data
+        formData.append('images', paragraph.img); 
+      } else {
+        formData.append(`paragraphs[${index}][img]`, paragraph.img || '');
       }
     });
 
     try {
       const response = await fetch(`https://iot-backend-server-sparkling-sun-1719.fly.dev/updateProject/${selectedProject._id}`, {
         method: 'PUT',
-        body: formData, // Use FormData for both text and image files
+        body: formData, 
       });
 
       if (response.ok) {
         alert('Project updated successfully!');
-        setSelectedProject(null); // Reset the form after successful update
+        setSelectedProject(null);
       } else {
         const errorData = await response.json();
         alert(`Failed to update project: ${errorData.message}`);
@@ -197,11 +181,9 @@ function UpdateProject() {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setImgSrc(URL.createObjectURL(e.target.files[0]))}
-              required
+              onChange={(e) => setImgSrc(e.target.files[0])}
             />
-            {/* Display a meaningful alt text or remove the alt attribute if it's decorative */}
-            {imgSrc && <img src={imgSrc} width="300" alt={projectName ? projectName : 'Main project image'} />}
+            {imgSrc && <img src={imgSrc instanceof File ? URL.createObjectURL(imgSrc) : imgSrc} width="300" alt={projectName} />}
           </div>
           <div>
             <label>Title:</label>
@@ -242,7 +224,7 @@ function UpdateProject() {
                 />
                 <input
                   type="text"
-                  placeholder='Year of Publication'
+                  placeholder="Year of Publication"
                   value={publication.date}
                   onChange={(e) => handlePublicationChange(index, 'date', e.target.value)}
                 />
@@ -252,18 +234,15 @@ function UpdateProject() {
             <button type="button" onClick={handleAddPublication}>Add Publication</button>
           </div>
 
-          {/* Conditionally render the type dropdown if the project has a type field or it's set to null */}
-          {type !== undefined && (
-            <div>
-              <label>Type:</label>
-              <select value={type || ''} onChange={(e) => setType(e.target.value)}>
-                <option value="">Select a type</option>
-                <option value="health">Health</option>
-                <option value="smart mobility">Smart Mobility</option>
-                <option value="infrastructure">Infrastructure</option>
-              </select>
-            </div>
-          )}
+          <div>
+            <label>Type:</label>
+            <select value={type || ''} onChange={(e) => setType(e.target.value)}>
+              <option value="">Select a type</option>
+              <option value="health">Health</option>
+              <option value="smart mobility">Smart Mobility</option>
+              <option value="infrastructure">Infrastructure</option>
+            </select>
+          </div>
 
           <div>
             <label>Paragraphs:</label>
@@ -291,11 +270,12 @@ function UpdateProject() {
                     accept="image/*"
                     onChange={(e) => handleFileChange(index, e.target.files[0])}
                   />
-                  {/* If img is a File, show the preview, otherwise show the URL from MongoDB */}
-                  {paragraph.img instanceof File ? (
-                    <img src={URL.createObjectURL(paragraph.img)} width="300" alt={paragraph.title ? paragraph.title : `Paragraph ${index + 1}`} />
-                  ) : (
-                    paragraph.img && <img src={paragraph.img} width="300" alt={paragraph.title ? paragraph.title : `Paragraph ${index + 1}`} />
+                  {paragraph.img && (
+                    <img
+                      src={paragraph.img instanceof File ? URL.createObjectURL(paragraph.img) : paragraph.img}
+                      width="300"
+                      alt={paragraph.title || `Paragraph ${index + 1}`}
+                    />
                   )}
                 </div>
                 <button type="button" onClick={() => handleRemoveParagraph(index)}>Remove Paragraph</button>
@@ -303,7 +283,8 @@ function UpdateProject() {
             ))}
             <button type="button" onClick={handleAddParagraph}>Add Paragraph</button>
           </div>
-          <button type="submit" disabled={ uploading}>
+
+          <button type="submit" disabled={uploading}>
             {uploading ? 'Updating...' : 'Update Project'}
           </button>
         </form>
