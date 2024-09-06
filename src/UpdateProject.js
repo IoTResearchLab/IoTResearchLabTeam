@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './UpdateProject.css'; // Import the CSS file
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 function UpdateProject() {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [title, setTitle] = useState(''); // Optional
-  const [projectName, setProjectName] = useState(''); // Required
-  const [introduction, setIntroduction] = useState(''); // Optional
-  const [paragraphs, setParagraphs] = useState([{ title: '', paragraph: '', img: '' }]); // Default values
-  const [slug, setSlug] = useState(''); // Required
-  const [publications, setPublications] = useState([{ title: '', url: '', authors: '', date: '' }]); // Publications array
-  const [type, setType] = useState(null); // Optional
-  const [imgSrc, setImgSrc] = useState(''); // Required
-  const [uploading, setUploading] = useState(false); // Track upload state
+  const [title, setTitle] = useState('');
+  const [projectName, setProjectName] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [paragraphs, setParagraphs] = useState([{ title: '', paragraph: '', img: '' }]);
+  const [slug, setSlug] = useState('');
+  const [publications, setPublications] = useState([{ title: '', url: '', authors: '', date: '' }]);
+  const [type, setType] = useState(null);
+  const [imgSrc, setImgSrc] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/projects')
@@ -21,25 +22,60 @@ function UpdateProject() {
       .catch(error => console.error('Error fetching projects:', error));
   }, []);
 
+  // Helper function to upload images to Firebase and return the download URL
+  const uploadImageToFirebase = async (file) => {
+    if (!file) return null;
+    
+    const storage = getStorage();  // Initialize Firebase Storage
+    const storageRef = ref(storage, `images/${Date.now()}_${file.name}`);  // Create a reference with a unique name
+    
+    try {
+      await uploadBytes(storageRef, file);  // Upload the image
+      const downloadURL = await getDownloadURL(storageRef);  // Get the URL of the uploaded image
+      return downloadURL;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return null;
+    }
+  };
+  
   const handleSelectChange = (e) => {
     const projectId = e.target.value;
     const project = projects.find(p => p._id === projectId);
 
     setSelectedProject(project);
-    setTitle(project?.title || ''); 
-    setProjectName(project?.projectName || ''); 
-    setIntroduction(project?.introduction || ''); 
+    setTitle(project?.title || '');
+    setProjectName(project?.projectName || '');
+    setIntroduction(project?.introduction || '');
     setParagraphs(
       project?.paragraphs?.map(p => ({
-        title: p?.title || '', 
+        title: p?.title || '',
         paragraph: p?.paragraph || '',
         img: p?.img || ''
-      })) || [{ title: '', paragraph: '', img: '' }] 
+      })) || [{ title: '', paragraph: '', img: '' }]
     );
-    setSlug(project?.slug || ''); 
+    setSlug(project?.slug || '');
     setPublications(Array.isArray(project?.publications) ? project.publications : [{ title: '', url: '', authors: '', date: '' }]);
-    setType(project?.type ?? null); 
-    setImgSrc(project?.imgSrc || ''); 
+    setType(project?.type ?? null);
+    setImgSrc(project?.imgSrc || '');
+  };
+
+  const handleMainImageChange = async (file) => {
+    if (file) {
+      const downloadURL = await uploadImageToFirebase(file);
+      if (downloadURL) setImgSrc(downloadURL);
+    }
+  };
+
+  const handleFileChange = async (index, file) => {
+    if (file) {
+      const downloadURL = await uploadImageToFirebase(file);
+      if (downloadURL) {
+        const newParagraphs = [...paragraphs];
+        newParagraphs[index].img = downloadURL;
+        setParagraphs(newParagraphs);
+      }
+    }
   };
 
   const handleAddParagraph = () => {
@@ -48,13 +84,7 @@ function UpdateProject() {
 
   const handleParagraphChange = (index, field, value) => {
     const newParagraphs = paragraphs.slice();
-    newParagraphs[index][field] = value || ''; 
-    setParagraphs(newParagraphs);
-  };
-
-  const handleFileChange = (index, file) => {
-    const newParagraphs = [...paragraphs];
-    newParagraphs[index].img = file; // Store the File object
+    newParagraphs[index][field] = value || '';
     setParagraphs(newParagraphs);
   };
 
@@ -87,55 +117,37 @@ function UpdateProject() {
       alert('Please fill in the required fields: Project Name and Slug.');
       return;
     }
-    
+
     setUploading(true);
-    
-    const formData = new FormData();
-    formData.append('projectName', projectName);
-    formData.append('title', title || ''); 
-    formData.append('introduction', introduction || ''); 
-    formData.append('slug', slug || ''); 
-    
-    // Append main image file if there is one
-    if (imgSrc instanceof File) {
-      formData.append('imgSrc', imgSrc); 
-    } else {
-      formData.append('imgSrc', imgSrc || ''); 
-    }
-    
-    formData.append('publications', JSON.stringify(publications));
-    if (type !== null) {
-      formData.append('type', type);
-    }
-    
-    // Append paragraphs as a JSON string
-    formData.append('paragraphs', JSON.stringify(paragraphs.map(paragraph => ({
-      title: paragraph.title || '',
-      paragraph: paragraph.paragraph || '',
-      img: paragraph.img instanceof File ? '' : paragraph.img // Send empty if it's a file, handle upload separately
-    }))));
-    
-    // Append files separately for paragraphs
-    paragraphs.forEach((paragraph, index) => {
-      if (paragraph.img instanceof File) {
-        formData.append(`images`, paragraph.img); 
-      }
-    });
-    
+
+    const updatedProject = {
+      projectName,
+      title,
+      introduction,
+      slug,
+      imgSrc,  // The Firebase URL for the main image
+      publications,
+      type,
+      paragraphs
+    };
+
     try {
       const response = await fetch(`https://iot-backend-server-sparkling-sun-1719.fly.dev/updateProject/${selectedProject._id}`, {
         method: 'PUT',
-        body: formData, 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProject), 
       });
-    
+
       if (!response.ok) {
-        const errorText = await response.text(); 
+        const errorText = await response.text();
         throw new Error(`Failed to update project: ${errorText}`);
       }
-    
+
       alert('Project updated successfully!');
-      setSelectedProject(null); 
-    
+      setSelectedProject(null);
+
     } catch (error) {
       console.error('Error updating project:', error);
       alert(`Error updating project: ${error.message}`);
@@ -143,8 +155,6 @@ function UpdateProject() {
       setUploading(false);
     }
   };
-  
-  
 
   return (
     <div className="update-project-container">
@@ -186,9 +196,9 @@ function UpdateProject() {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setImgSrc(e.target.files[0])}
+              onChange={(e) => handleMainImageChange(e.target.files[0])}
             />
-            {imgSrc && <img src={imgSrc instanceof File ? URL.createObjectURL(imgSrc) : imgSrc} width="300" alt={projectName} />}
+            {imgSrc && <img src={imgSrc} width="300" alt={projectName} />}
           </div>
           <div>
             <label>Title:</label>
@@ -277,7 +287,7 @@ function UpdateProject() {
                   />
                   {paragraph.img && (
                     <img
-                      src={paragraph.img instanceof File ? URL.createObjectURL(paragraph.img) : paragraph.img}
+                      src={paragraph.img}
                       width="300"
                       alt={paragraph.title || `Paragraph ${index + 1}`}
                     />
