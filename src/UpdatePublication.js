@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from './firebase';
-import { onAuthStateChanged } from "firebase/auth";
+
 import './UpdatePublication.css'; // Import the CSS file
 
 function UpdatePublication() {
@@ -11,14 +10,8 @@ function UpdatePublication() {
   const [authors, setAuthors] = useState('');
   const [publisher, setPublisher] = useState('');
   const [year, setYear] = useState('');
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-    return unsubscribe;
-  }, []);
+
 
   useEffect(() => {
     fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/publications')
@@ -41,10 +34,7 @@ function UpdatePublication() {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    if (!user) {
-      alert('You must be logged in to update a publication.');
-      return;
-    }
+ 
 
     const updatedPublication = {
       title,

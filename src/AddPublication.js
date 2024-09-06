@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { auth } from './firebase';
-import { onAuthStateChanged } from "firebase/auth";
+import React, { useState } from 'react';
 import './AddTeamMember.css';
 
 function AddPublication() {
@@ -9,22 +7,11 @@ function AddPublication() {
   const [authors, setAuthors] = useState('');
   const [publisher, setPublisher] = useState('');
   const [year, setYear] = useState('');
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-    return unsubscribe;
-  }, []);
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!user) {
-      alert('You must be logged in to add a publication.');
-      return;
-    }
 
     const publication = {
       title,
