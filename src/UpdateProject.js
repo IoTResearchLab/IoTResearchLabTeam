@@ -82,36 +82,36 @@ function UpdateProject() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-
+  
     if (!projectName || !slug) {
       alert('Please fill in the required fields: Project Name and Slug.');
       return;
     }
-
+  
     setUploading(true);
-
+  
     const formData = new FormData();
     formData.append('projectName', projectName);
     formData.append('title', title || ''); 
     formData.append('introduction', introduction || ''); 
     formData.append('slug', slug || ''); 
-
+  
     // Append main image file if there is one
     if (imgSrc instanceof File) {
       formData.append('imgSrc', imgSrc); 
     } else {
       formData.append('imgSrc', imgSrc || ''); 
     }
-
+  
     formData.append('publications', JSON.stringify(publications));
     if (type !== null) {
       formData.append('type', type);
     }
-
+  
     paragraphs.forEach((paragraph, index) => {
       formData.append(`paragraphs[${index}][title]`, paragraph.title || '');
       formData.append(`paragraphs[${index}][paragraph]`, paragraph.paragraph || '');
-
+  
       // Append file if it's a new image, otherwise append the existing URL
       if (paragraph.img instanceof File) {
         formData.append('images', paragraph.img); 
@@ -119,27 +119,30 @@ function UpdateProject() {
         formData.append(`paragraphs[${index}][img]`, paragraph.img || '');
       }
     });
-
+  
     try {
       const response = await fetch(`https://iot-backend-server-sparkling-sun-1719.fly.dev/updateProject/${selectedProject._id}`, {
         method: 'PUT',
         body: formData, 
       });
-
-      if (response.ok) {
-        alert('Project updated successfully!');
-        setSelectedProject(null);
-      } else {
-        const errorData = await response.json();
-        alert(`Failed to update project: ${errorData.message}`);
+  
+      // Check if the response is successful
+      if (!response.ok) {
+        const errorText = await response.text(); // Capture the response as text (HTML or error message)
+        throw new Error(`Failed to update project: ${errorText}`);
       }
+  
+      alert('Project updated successfully!');
+      setSelectedProject(null); // Reset the form after successful update
+  
     } catch (error) {
       console.error('Error updating project:', error);
-      alert('An error occurred while updating the project.');
+      alert(`Error updating project: ${error.message}`);
     } finally {
       setUploading(false);
     }
   };
+  
 
   return (
     <div className="update-project-container">
