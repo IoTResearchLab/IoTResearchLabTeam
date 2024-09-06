@@ -117,37 +117,58 @@ function UpdateProject() {
       alert('Please fill in the required fields: Project Name and Slug.');
       return;
     }
-
+    
     setUploading(true);
-
-    const updatedProject = {
-      projectName,
-      title,
-      introduction,
-      slug,
-      imgSrc,  // The Firebase URL for the main image
-      publications,
-      type,
-      paragraphs
-    };
-
+  
+    // First, upload any images that are files in the paragraphs
+    const updatedParagraphs = await Promise.all(paragraphs.map(async (paragraph) => {
+      // If the img is a file, upload it to Firebase
+      if (paragraph.img instanceof File) {
+        const downloadURL = await uploadImageToFirebase(paragraph.img);
+        return {
+          ...paragraph,
+          img: downloadURL || '', // Replace the img field with the download URL
+        };
+      }
+      return paragraph; // If not a file, return the paragraph as is
+    }));
+  
+    const formData = new FormData();
+    formData.append('projectName', projectName);
+    formData.append('title', title || ''); 
+    formData.append('introduction', introduction || ''); 
+    formData.append('slug', slug || ''); 
+    
+    // Append main image file if there is one (ensure it's treated as a file)
+    if (imgSrc instanceof File) {
+      const mainImageUrl = await uploadImageToFirebase(imgSrc); // Upload the main image
+      formData.append('imgSrc', mainImageUrl || ''); 
+    } else {
+      formData.append('imgSrc', imgSrc || ''); // If it's a URL, append it as is
+    }
+  
+    formData.append('publications', JSON.stringify(publications));
+    if (type !== null) {
+      formData.append('type', type);
+    }
+  
+    // Append the updated paragraphs data with Firebase image URLs
+    formData.append('paragraphs', JSON.stringify(updatedParagraphs));
+  
     try {
       const response = await fetch(`https://iot-backend-server-sparkling-sun-1719.fly.dev/updateProject/${selectedProject._id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedProject), 
+        body: formData, 
       });
-
+  
       if (!response.ok) {
-        const errorText = await response.text();
+        const errorText = await response.text(); 
         throw new Error(`Failed to update project: ${errorText}`);
       }
-
+  
       alert('Project updated successfully!');
-      setSelectedProject(null);
-
+      setSelectedProject(null); // Reset the form after successful update
+  
     } catch (error) {
       console.error('Error updating project:', error);
       alert(`Error updating project: ${error.message}`);
@@ -155,6 +176,7 @@ function UpdateProject() {
       setUploading(false);
     }
   };
+  
 
   return (
     <div className="update-project-container">
