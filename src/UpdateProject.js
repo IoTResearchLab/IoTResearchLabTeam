@@ -82,59 +82,60 @@ function UpdateProject() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-  
+    
     if (!projectName || !slug) {
       alert('Please fill in the required fields: Project Name and Slug.');
       return;
     }
-  
+    
     setUploading(true);
-  
+    
     const formData = new FormData();
     formData.append('projectName', projectName);
     formData.append('title', title || ''); 
     formData.append('introduction', introduction || ''); 
     formData.append('slug', slug || ''); 
-  
+    
     // Append main image file if there is one
     if (imgSrc instanceof File) {
       formData.append('imgSrc', imgSrc); 
     } else {
       formData.append('imgSrc', imgSrc || ''); 
     }
-  
+    
     formData.append('publications', JSON.stringify(publications));
     if (type !== null) {
       formData.append('type', type);
     }
-  
+    
+    // Append paragraphs as a JSON string
+    formData.append('paragraphs', JSON.stringify(paragraphs.map(paragraph => ({
+      title: paragraph.title || '',
+      paragraph: paragraph.paragraph || '',
+      img: paragraph.img instanceof File ? '' : paragraph.img // Send empty if it's a file, handle upload separately
+    }))));
+    
+    // Append files separately for paragraphs
     paragraphs.forEach((paragraph, index) => {
-      formData.append(`paragraphs[${index}][title]`, paragraph.title || '');
-      formData.append(`paragraphs[${index}][paragraph]`, paragraph.paragraph || '');
-  
-      // Append file if it's a new image, otherwise append the existing URL
       if (paragraph.img instanceof File) {
-        formData.append('images', paragraph.img); 
-      } else {
-        formData.append(`paragraphs[${index}][img]`, paragraph.img || '');
+        formData.append(`images`, paragraph.img); 
       }
     });
-  
+    
     try {
       const response = await fetch(`https://iot-backend-server-sparkling-sun-1719.fly.dev/updateProject/${selectedProject._id}`, {
         method: 'PUT',
         body: formData, 
       });
-  
-      // Check if the response is successful
+    
       if (!response.ok) {
-        const errorText = await response.text(); // Capture the response as text (HTML or error message)
+        const errorText = await response.text(); 
         throw new Error(`Failed to update project: ${errorText}`);
       }
-  
+    
       alert('Project updated successfully!');
-      setSelectedProject(null); // Reset the form after successful update
-  
+      setSelectedProject(null); 
+    
     } catch (error) {
       console.error('Error updating project:', error);
       alert(`Error updating project: ${error.message}`);
@@ -142,6 +143,7 @@ function UpdateProject() {
       setUploading(false);
     }
   };
+  
   
 
   return (
