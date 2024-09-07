@@ -112,12 +112,12 @@ function UpdateProject() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    
+  
     if (!projectName || !slug) {
       alert('Please fill in the required fields: Project Name and Slug.');
       return;
     }
-    
+  
     setUploading(true);
   
     // First, upload any images that are files in the paragraphs
@@ -138,7 +138,7 @@ function UpdateProject() {
     formData.append('title', title || ''); 
     formData.append('introduction', introduction || ''); 
     formData.append('slug', slug || ''); 
-    
+  
     // Append main image file if there is one (ensure it's treated as a file)
     if (imgSrc instanceof File) {
       const mainImageUrl = await uploadImageToFirebase(imgSrc); // Upload the main image
@@ -147,7 +147,14 @@ function UpdateProject() {
       formData.append('imgSrc', imgSrc || ''); // If it's a URL, append it as is
     }
   
-    formData.append('publications', JSON.stringify(publications));
+    // Append publications array directly (no JSON.stringify)
+    publications.forEach((publication, index) => {
+      formData.append(`publications[${index}][title]`, publication.title);
+      formData.append(`publications[${index}][url]`, publication.url);
+      formData.append(`publications[${index}][authors]`, publication.authors);
+      formData.append(`publications[${index}][date]`, publication.date);
+    });
+  
     if (type !== null) {
       formData.append('type', type);
     }
@@ -176,6 +183,7 @@ function UpdateProject() {
       setUploading(false);
     }
   };
+  
   
 
   return (
