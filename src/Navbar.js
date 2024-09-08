@@ -1,24 +1,37 @@
+import React, { useState } from 'react';
 import "./Navbar.css";
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-icon">
-        <img src='https://media.licdn.com/dms/image/v2/D560BAQEhB_l7NVlRJA/company-logo_200_200/company-logo_200_200/0/1719603218595?e=1732752000&v=beta&t=Sva0AMyMl_6UuGgjts_SIAvmSKjSL9bCUm52LR8lw2Q' alt="icon" />
+        <img
+          src="https://media.licdn.com/dms/image/v2/D560BAQEhB_l7NVlRJA/company-logo_200_200/company-logo_200_200/0/1719603218595?e=1732752000&v=beta&t=Sva0AMyMl_6UuGgjts_SIAvmSKjSL9bCUm52LR8lw2Q"
+          alt="icon"
+        />
       </div>
-      <ul className="navbar-links">
+      <div className="navbar-hamburger" onClick={toggleMenu}>
+        &#9776; {/* Hamburger Icon */}
+      </div>
+      <ul className={`navbar-links ${menuOpen ? 'active' : ''}`}>
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
         </li>
         <li>
-          <Link to="/team">Team Member</Link>
+          <Link to="/team" onClick={() => setMenuOpen(false)}>Team Member</Link>
         </li>
         <li>
-          <Link to="/publication">Publication</Link>
+          <Link to="/publication" onClick={() => setMenuOpen(false)}>Publication</Link>
         </li>
         <li>
-          <Link to="/project">Project Page</Link>
+          <Link to="/project" onClick={() => setMenuOpen(false)}>Project Page</Link>
         </li>
       </ul>
     </nav>

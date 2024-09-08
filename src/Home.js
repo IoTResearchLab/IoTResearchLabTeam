@@ -4,7 +4,7 @@ import './Home.css';  // Import the CSS file for styling
 
 const Home = () => {
   return (
-    <div >
+    <div className="home-container" >
 
       <h1>IoT Research Lab Team Website</h1>
      

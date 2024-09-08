@@ -1,54 +1,94 @@
 /* Reset some basic styling */
 body, html {
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Navbar styling */
-  .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: #ffffff;
-    padding: 1rem;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000; /* Ensures the navbar is on top of other content */
-  }
-  
-  .navbar-icon img {
-    width: 60px;
-    height: 60px;
-    margin-right: 1rem;
-  }
-  
-  .navbar-links {
-    display: flex;
-    list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-    margin: 0;
-    padding: 0;
+/* Navbar styling */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align items to the left */
+  background-color: #ffffff;
+  padding: 1rem;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensures the navbar is on top of other content */
+}
+
+.navbar-icon img {
+  width: 60px;
+  height: 60px;
+  margin-right: 1rem;
+}
+
+/* Hamburger Menu Icon */
+.navbar-hamburger {
+  display: none; /* Hidden by default, only shown in mobile view */
+  font-size: 2rem;
+  cursor: pointer;
+  margin-right: rem; /* Add some spacing between logo and hamburger */
+}
+
+.navbar-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-grow: 1; /* Makes the links take up the rest of the space */
+}
+
+.navbar-links li {
+  margin-right: 2rem;
+  font-weight: bold;
+}
+
+.navbar-links li a {
+  color: #00427c;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.navbar-links li a:hover {
+  color: #ccc;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .navbar {
+      justify-content: flex-start; /* Align to the left on mobile */
   }
-  
+
+  /* Show the hamburger icon */
+  .navbar-hamburger {
+      display: block;
+  }
+
+  /* Hide the normal navbar links */
+  .navbar-links {
+      display: none;
+      flex-direction: column; /* Vertical layout */
+      position: absolute;
+      top: 100%; /* Just below the navbar */
+      left: 0;
+      width: 100%;
+      background-color: #ffffff;
+  }
+
+  /* Show navbar links when toggled */
+  .navbar-links.active {
+      display: flex;
+  }
+
   .navbar-links li {
-    margin-right: 2rem;
-    font-weight: bold;
+      margin: 1rem 0; /* More spacing for vertical layout */
+      text-align: center;
   }
-  
-  .navbar-links li a {
-    color: #00427c;
-    text-decoration:none;
-    font-size: 1.2rem;
-  }
-  
-  .navbar-links li a:hover {
-    color: #ccc;
-  }
-  
-  /* Add some padding to the body to account for the fixed navbar */
-  body {
-    padding-top: 80px; /* Adjust based on the height of your navbar */
-  }
-  
+}
+
+/* Add some padding to the body to account for the fixed navbar */
+body {
+  padding-top: 80px; /* Adjust based on the height of your navbar */
+}
