@@ -10,8 +10,8 @@ function AddTeamMember() {
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false); // To disable button while submitting
 
-  // Define the available types for the dropdown
-  const teamMemberTypes = ['Alumni', 'Affiliate Scholars', 'Intern'];
+  // Define the available types for the dropdown, including 'None' option which sends an empty string
+  const teamMemberTypes = ['Alumni', 'Affiliate Scholars', 'Intern', 'None'];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ function AddTeamMember() {
     const teamMember = {
       name,
       position,
-      type,
+      type: type === 'None' ? '' : type, // If 'None' is selected, send an empty string
       image: imageUrl
     };
 
@@ -92,7 +92,7 @@ function AddTeamMember() {
             <option value="" disabled>Select type</option>
             {teamMemberTypes.map((type) => (
               <option key={type} value={type}>
-                {type}
+                {type === 'None' ? 'None' : type} {/* Display 'None' as an option */}
               </option>
             ))}
           </select>

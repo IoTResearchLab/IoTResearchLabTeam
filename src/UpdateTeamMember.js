@@ -12,6 +12,9 @@ function UpdateTeamMember() {
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // List of team member types (including "None" as an option to send an empty string)
+  const teamMemberTypes = ['Alumni', 'Affiliate Scholars', 'Intern', 'None'];
+
   useEffect(() => {
     fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/Team')
       .then(response => response.json())
@@ -44,7 +47,7 @@ function UpdateTeamMember() {
     const updatedMember = {
       name,
       position,
-      type,
+      type: type === 'None' ? '' : type, // If 'None' is selected, send an empty string
       image: imageUrl
     };
 
@@ -109,12 +112,18 @@ function UpdateTeamMember() {
           </div>
           <div>
             <label>Type:</label>
-            <input
-              type="text"
+            <select
               value={type}
               onChange={(e) => setType(e.target.value)}
               required
-            />
+            >
+              <option value="" disabled>Select type</option>
+              {teamMemberTypes.map(type => (
+                <option key={type} value={type}>
+                  {type === 'None' ? 'None' : type}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label>Image:</label>
