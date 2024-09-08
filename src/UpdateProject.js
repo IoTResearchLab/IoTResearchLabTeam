@@ -112,17 +112,16 @@ function UpdateProject() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-  
+
     if (!projectName || !slug) {
       alert('Please fill in the required fields: Project Name and Slug.');
       return;
     }
-  
+
     setUploading(true);
-  
+
     // First, upload any images that are files in the paragraphs
     const updatedParagraphs = await Promise.all(paragraphs.map(async (paragraph) => {
-      // If the img is a file, upload it to Firebase
       if (paragraph.img instanceof File) {
         const downloadURL = await uploadImageToFirebase(paragraph.img);
         return {
@@ -130,52 +129,37 @@ function UpdateProject() {
           img: downloadURL || '', // Replace the img field with the download URL
         };
       }
-      return paragraph; // If not a file, return the paragraph as is
+      return paragraph;
     }));
-  
-    const formData = new FormData();
-    formData.append('projectName', projectName);
-    formData.append('title', title || ''); 
-    formData.append('introduction', introduction || ''); 
-    formData.append('slug', slug || ''); 
-  
-    // Append main image file if there is one (ensure it's treated as a file)
-    if (imgSrc instanceof File) {
-      const mainImageUrl = await uploadImageToFirebase(imgSrc); // Upload the main image
-      formData.append('imgSrc', mainImageUrl || ''); 
-    } else {
-      formData.append('imgSrc', imgSrc || ''); // If it's a URL, append it as is
-    }
-  
-    // Append publications array directly (no JSON.stringify)
-    publications.forEach((publication, index) => {
-      formData.append(`publications[${index}][title]`, publication.title);
-      formData.append(`publications[${index}][url]`, publication.url);
-      formData.append(`publications[${index}][authors]`, publication.authors);
-      formData.append(`publications[${index}][date]`, publication.date);
-    });
-  
-    if (type !== null) {
-      formData.append('type', type);
-    }
-  
-    // Append the updated paragraphs data with Firebase image URLs
-    formData.append('paragraphs', JSON.stringify(updatedParagraphs));
-  
+
+    const updatedProject = {
+      projectName,
+      title: title || '',
+      introduction: introduction || '',
+      slug: slug || '',
+      imgSrc: imgSrc instanceof File ? await uploadImageToFirebase(imgSrc) : imgSrc || '', // Upload main image if it's a file
+      publications: publications, // Directly send the array of publications
+      paragraphs: updatedParagraphs,
+      type: type || null,
+    };
+
     try {
       const response = await fetch(`https://iot-backend-server-sparkling-sun-1719.fly.dev/updateProject/${selectedProject._id}`, {
         method: 'PUT',
-        body: formData, 
+        headers: {
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+        body: JSON.stringify(updatedProject), // Send the entire project as JSON
       });
-  
+
       if (!response.ok) {
-        const errorText = await response.text(); 
+        const errorText = await response.text();
         throw new Error(`Failed to update project: ${errorText}`);
       }
-  
+
       alert('Project updated successfully!');
-      setSelectedProject(null); // Reset the form after successful update
-  
+      setSelectedProject(null); // Reset the form after a successful update
+
     } catch (error) {
       console.error('Error updating project:', error);
       alert(`Error updating project: ${error.message}`);
@@ -183,6 +167,7 @@ function UpdateProject() {
       setUploading(false);
     }
   };
+
   
   
 
