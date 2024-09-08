@@ -75,9 +75,38 @@ function UpdateTeamMember() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!selectedMember) return;
+
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${selectedMember.name}?`);
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/deleteTeamMember', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: selectedMember._id }),
+      });
+
+      if (response.ok) {
+        alert('Team member deleted successfully!');
+        // Remove the deleted member from the team list
+        setTeamMembers(teamMembers.filter(member => member._id !== selectedMember._id));
+        setSelectedMember(null); // Clear the form after deletion
+      } else {
+        alert('Failed to delete team member.');
+      }
+    } catch (error) {
+      console.error('Error deleting team member:', error);
+      alert('An error occurred while deleting the team member.');
+    }
+  };
+
   return (
     <div className="update-team-member">
-      <h3>Update Team Member</h3>
+      <h3>Update or Delete Team Member</h3>
       <div>
         <label>Select a Team Member:</label>
         <select onChange={handleSelectChange} value={selectedMember ? selectedMember._id : ''}>
@@ -91,55 +120,69 @@ function UpdateTeamMember() {
       </div>
 
       {selectedMember && (
-        <form onSubmit={handleUpdate}>
-          <div>
-            <label>Name:</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Position:</label>
-            <input
-              type="text"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Type:</label>
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              required
-            >
-              <option value="" disabled>Select type</option>
-              {teamMemberTypes.map(type => (
-                <option key={type} value={type}>
-                  {type === 'None' ? 'None' : type}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label>Image:</label>
-            <input
-              type="file"
-              onChange={(e) => setImageFile(e.target.files[0])}
-              accept="image/*"
-            />
-            {imageFile ? (
-              <img src={URL.createObjectURL(imageFile)} alt="Preview" width="100" />
-            ) : (
-              <img src={selectedMember.image} alt={selectedMember.name} width="100" />
-            )}
-          </div>
-          <button type="submit" disabled={isSubmitting}>Update</button>
-        </form>
+        <>
+          <form onSubmit={handleUpdate}>
+            <div>
+              <label>Name:</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Position:</label>
+              <input
+                type="text"
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Type:</label>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                required
+              >
+                <option value="" disabled>Select type</option>
+                {teamMemberTypes.map(type => (
+                  <option key={type} value={type}>
+                    {type === 'None' ? 'None' : type}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label>Image:</label>
+              <input
+                type="file"
+                onChange={(e) => setImageFile(e.target.files[0])}
+                accept="image/*"
+              />
+              {imageFile ? (
+                <img src={URL.createObjectURL(imageFile)} alt="Preview" width="100" />
+              ) : (
+                <img src={selectedMember.image} alt={selectedMember.name} width="100" />
+              )}
+            </div>
+            <button type="submit" disabled={isSubmitting}>Update Team Member</button>
+          </form>
+
+          <button
+            onClick={handleDelete}
+            style={{ 
+              backgroundColor: 'red', 
+              color: 'white', 
+              width: '100%', // Set the width to 100% or any other value
+              padding: '10px', // Add some padding for better appearance
+              fontSize: '16px'  // Increase the font size if needed
+            }}          >
+            Delete Team Member
+          </button>
+        </>
       )}
     </div>
   );
