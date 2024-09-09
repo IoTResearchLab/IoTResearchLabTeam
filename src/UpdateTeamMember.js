@@ -10,6 +10,7 @@ function UpdateTeamMember() {
   const [position, setPosition] = useState('');
   const [type, setType] = useState('');
   const [imageFile, setImageFile] = useState(null);
+  const [personalLink, setPersonalLink] = useState(''); // Add state for personalLink
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // List of team member types (including "None" as an option to send an empty string)
@@ -30,27 +31,31 @@ function UpdateTeamMember() {
     setPosition(member.position);
     setType(member.type);
     setImageFile(null);
+    setPersonalLink(member.personalLink || ''); // Load personalLink from selected member
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+  
     let imageUrl = selectedMember.image;
-
+  
+    // Upload the image to Firebase if a new file is selected
     if (imageFile) {
       const imageRef = ref(storage, `images/${imageFile.name}`);
       await uploadBytes(imageRef, imageFile);
       imageUrl = await getDownloadURL(imageRef);
     }
-
+  
+    // Check if personalLink is empty and handle accordingly
     const updatedMember = {
       name,
       position,
       type: type === 'None' ? '' : type, // If 'None' is selected, send an empty string
-      image: imageUrl
+      image: imageUrl,
+      personalLink: personalLink ? personalLink : "" // Ensure the personalLink is included, even if empty
     };
-
+  
     try {
       const response = await fetch(`https://iot-backend-server-sparkling-sun-1719.fly.dev/updateTeamMember/${selectedMember._id}`, {
         method: 'PUT',
@@ -59,9 +64,13 @@ function UpdateTeamMember() {
         },
         body: JSON.stringify(updatedMember),
       });
-
+  
       if (response.ok) {
         alert('Team member updated successfully!');
+        // Reload the team members list to reflect the updated data
+        fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/Team')
+          .then(response => response.json())
+          .then(data => setTeamMembers(data));
         setSelectedMember(null); // Reset the form after successful update
       } else {
         const errorData = await response.json();
@@ -74,6 +83,7 @@ function UpdateTeamMember() {
       setIsSubmitting(false);
     }
   };
+  
 
   const handleDelete = async () => {
     if (!selectedMember) return;
@@ -168,6 +178,15 @@ function UpdateTeamMember() {
                 <img src={selectedMember.image} alt={selectedMember.name} width="100" />
               )}
             </div>
+            <div>
+              <label>Personal Link:</label> {/* New input for personalLink */}
+              <input
+                type="text"
+                value={personalLink}
+                onChange={(e) => setPersonalLink(e.target.value)}
+                placeholder="Enter personal link"
+              />
+            </div>
             <button type="submit" disabled={isSubmitting}>Update Team Member</button>
           </form>
 
@@ -179,7 +198,7 @@ function UpdateTeamMember() {
               width: '100%', // Set the width to 100% or any other value
               padding: '10px', // Add some padding for better appearance
               fontSize: '16px'  // Increase the font size if needed
-            }}          >
+            }}>
             Delete Team Member
           </button>
         </>

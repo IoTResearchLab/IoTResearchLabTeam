@@ -8,6 +8,7 @@ function AddTeamMember() {
   const [position, setPosition] = useState('');
   const [type, setType] = useState('');
   const [imageFile, setImageFile] = useState(null);
+  const [personalLink, setPersonalLink] = useState(''); // Add state for personalLink
   const [isSubmitting, setIsSubmitting] = useState(false); // To disable button while submitting
 
   // Define the available types for the dropdown, including 'None' option which sends an empty string
@@ -31,7 +32,8 @@ function AddTeamMember() {
       name,
       position,
       type: type === 'None' ? '' : type, // If 'None' is selected, send an empty string
-      image: imageUrl
+      image: imageUrl,
+      personalLink // Include personalLink in the team member data
     };
 
     // Submit the data to your backend API
@@ -50,6 +52,7 @@ function AddTeamMember() {
         setPosition('');
         setType('');
         setImageFile(null);
+        setPersonalLink(''); // Reset the personalLink input
       } else {
         alert('Failed to add team member.');
       }
@@ -104,6 +107,15 @@ function AddTeamMember() {
             onChange={(e) => setImageFile(e.target.files[0])}
             accept="image/*"
             required
+          />
+        </div>
+        <div>
+          <label>Personal Link:</label> {/* New input for personalLink */}
+          <input
+            type="text"
+            value={personalLink}
+            onChange={(e) => setPersonalLink(e.target.value)}
+            placeholder="Enter personal link"
           />
         </div>
         <button type="submit" disabled={isSubmitting}>

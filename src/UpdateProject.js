@@ -105,10 +105,13 @@ function UpdateProject() {
   };
 
   const handleRemovePublication = (index) => {
-    const newPublications = [...publications];
+    const newPublications = publications.slice();
     newPublications.splice(index, 1);
-    setPublications(newPublications);
+    setPublications(newPublications); // Update state
+  
+    // Additionally, you may want to directly update the backend immediately after removing the publication from the array.
   };
+  
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -138,7 +141,7 @@ function UpdateProject() {
     formData.append('title', title || ''); 
     formData.append('introduction', introduction || ''); 
     formData.append('slug', slug || ''); 
-  
+    
     // Append main image file if there is one (ensure it's treated as a file)
     if (imgSrc instanceof File) {
       const mainImageUrl = await uploadImageToFirebase(imgSrc); // Upload the main image
@@ -146,19 +149,14 @@ function UpdateProject() {
     } else {
       formData.append('imgSrc', imgSrc || ''); // If it's a URL, append it as is
     }
-  
-    // Append publications array directly (no JSON.stringify)
-    publications.forEach((publication, index) => {
-      formData.append(`publications[${index}][title]`, publication.title);
-      formData.append(`publications[${index}][url]`, publication.url);
-      formData.append(`publications[${index}][authors]`, publication.authors);
-      formData.append(`publications[${index}][date]`, publication.date);
-    });
-  
+    
+    // Append publications array as a JSON string (adjustment for publications)
+    formData.append('publications', JSON.stringify(publications));
+    
     if (type !== null) {
       formData.append('type', type);
     }
-  
+    
     // Append the updated paragraphs data with Firebase image URLs
     formData.append('paragraphs', JSON.stringify(updatedParagraphs));
   
@@ -183,6 +181,7 @@ function UpdateProject() {
       setUploading(false);
     }
   };
+  
   
   
 
