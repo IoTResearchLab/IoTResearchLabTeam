@@ -25,13 +25,16 @@ const Navbar = () => {
           <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
         </li>
         <li>
-          <Link to="/team" onClick={() => setMenuOpen(false)}>Team Member</Link>
+          <Link to="/team" onClick={() => setMenuOpen(false)}>Team Members</Link>
         </li>
         <li>
-          <Link to="/publication" onClick={() => setMenuOpen(false)}>Publication</Link>
+          <Link to="/publication" onClick={() => setMenuOpen(false)}>Publications</Link>
         </li>
         <li>
-          <Link to="/project" onClick={() => setMenuOpen(false)}>Project Page</Link>
+          <Link to="/project" onClick={() => setMenuOpen(false)}>Projects</Link>
+        </li>
+        <li>
+          <Link to="/guides" onClick={() => setMenuOpen(false)}>Guides</Link>
         </li>
       </ul>
     </nav>

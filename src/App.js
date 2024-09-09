@@ -12,6 +12,7 @@ import Login from './login';
 import Project from './Project';
 import Publication from './Publication';
 import UpdatePublication from './UpdatePublication';
+import Guides from './Guides';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,6 +38,7 @@ function App() {
             <Route path="/update-publication" element={<UpdatePublication />} />
             <Route path="/add-project" element={<AddProject />} />
             <Route path="/update-project" element={<UpdateProject />} /> 
+            <Route path="/guides" element={<Guides/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}

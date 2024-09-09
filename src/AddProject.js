@@ -57,6 +57,7 @@ function AddProject() {
     newParagraphs[index].img = file; // Store the image file in state
     setParagraphs(newParagraphs);
   };
+  
 
   const handleRemoveParagraph = (index) => {
     const newParagraphs = [...paragraphs];
@@ -93,19 +94,21 @@ function AddProject() {
 
     // Add paragraphs data and images to FormData
     formData.append('paragraphs', JSON.stringify(paragraphs.map(p => ({
-      title: p.title,
-      paragraph: p.paragraph,
-      img: p.img ? '' : p.img // We'll handle the image files separately
-    }))));
+      title: p.title || '',  // Ensure title is included, even if empty
+      paragraph: p.paragraph || '',  // Ensure paragraph text is included, even if empty
+      img: p.img ? '' : p.img  // Placeholder for image file, handled separately
+    }))));    
 
     // Add publications data to FormData
     formData.append('publications', JSON.stringify(publications));
 
-    paragraphs.forEach((paragraph, index) => {
-      if (paragraph.img) {
-        formData.append('images', paragraph.img); // Send image file along with the form
-      }
-    });
+  // Ensure each image file is named with the corresponding paragraph index
+paragraphs.forEach((paragraph, index) => {
+  if (paragraph.img) {
+    formData.append(`images`, paragraph.img, `image_${index}`);
+  }
+});
+
 
     try {
       const response = await fetch('https://iot-backend-server-sparkling-sun-1719.fly.dev/addProject', {
@@ -226,32 +229,35 @@ function AddProject() {
         <div>
           <label>Paragraphs:</label>
           {paragraphs.map((paragraph, index) => (
-            <div key={index} className="paragraph-section">
-              <div>
-                <label>Title:</label>
-                <input
-                  type="text"
-                  value={paragraph.title}
-                  onChange={(e) => handleParagraphChange(index, 'title', e.target.value)}
-                />
-              </div>
-              <div>
-                <label>Paragraph:</label>
-                <textarea
-                  value={paragraph.paragraph}
-                  onChange={(e) => handleParagraphChange(index, 'paragraph', e.target.value)}
-                />
-              </div>
-              <div>
-                <label>Image:</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileChange(index, e.target.files[0])}
-                />
-              </div>
-              <button type="button" onClick={() => handleRemoveParagraph(index)}>Remove Paragraph</button>
-            </div>
+         <div key={index} className="paragraph-section">
+     
+           <div>
+             <label>Title:</label>
+             <input
+               type="text"
+               value={paragraph.title}
+               onChange={(e) => handleParagraphChange(index, 'title', e.target.value)}
+             />
+           </div>
+         
+           <div>
+             <label>Paragraph:</label>
+             <textarea
+               value={paragraph.paragraph}
+               onChange={(e) => handleParagraphChange(index, 'paragraph', e.target.value)}
+             />
+           </div>
+           <div>
+             <label>Image:</label>
+             <input
+               type="file"
+               accept="image/*"
+               onChange={(e) => handleFileChange(index, e.target.files[0])}
+             />
+           </div>
+         <button type="button" onClick={() => handleRemoveParagraph(index)}>Remove Paragraph</button>
+       </div>
+       
           ))}
           <button type="button" onClick={handleAddParagraph}>Add Paragraph</button>
         </div>
