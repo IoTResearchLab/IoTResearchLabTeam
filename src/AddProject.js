@@ -184,7 +184,7 @@ paragraphs.forEach((paragraph, index) => {
           </select>
         </div>
         <div>
-          <label>Slug:</label>
+          <label>Route:</label>
           <input
             type="text"
             value={slug}
@@ -227,7 +227,7 @@ paragraphs.forEach((paragraph, index) => {
         </div>
       
         <div>
-          <label>Paragraphs:</label>
+          <label>Sections:</label>
           {paragraphs.map((paragraph, index) => (
          <div key={index} className="paragraph-section">
      
@@ -255,11 +255,11 @@ paragraphs.forEach((paragraph, index) => {
                onChange={(e) => handleFileChange(index, e.target.files[0])}
              />
            </div>
-         <button type="button" onClick={() => handleRemoveParagraph(index)}>Remove Paragraph</button>
+         <button type="button" onClick={() => handleRemoveParagraph(index)}>Remove Section</button>
        </div>
        
           ))}
-          <button type="button" onClick={handleAddParagraph}>Add Paragraph</button>
+          <button type="button" onClick={handleAddParagraph}>Add Section</button>
         </div>
         <button type="submit" disabled={uploading }>
           {uploading ? 'Uploading...' : 'Add Project'}

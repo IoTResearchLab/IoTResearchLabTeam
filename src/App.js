@@ -13,6 +13,9 @@ import Project from './Project';
 import Publication from './Publication';
 import UpdatePublication from './UpdatePublication';
 import Guides from './Guides';
+import Teammembersguide from './Teammembersguide';
+import Publicationsguide from './Publicationsguide';
+import Projectsguide from './Projectsguide';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,6 +42,12 @@ function App() {
             <Route path="/add-project" element={<AddProject />} />
             <Route path="/update-project" element={<UpdateProject />} /> 
             <Route path="/guides" element={<Guides/>}/>
+            <Route path="/team-members-guide" element={<Teammembersguide/>}/>
+            <Route path="/publications-guide" element={<Publicationsguide/>}/>
+            <Route path="/projects-guide" element={<Projectsguide/>}/>
+
+
+
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}

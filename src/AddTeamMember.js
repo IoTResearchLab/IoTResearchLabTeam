@@ -77,7 +77,7 @@ function AddTeamMember() {
           />
         </div>
         <div>
-          <label>Position:</label>
+          <label>Member info</label>
           <input
             type="text"
             value={position}

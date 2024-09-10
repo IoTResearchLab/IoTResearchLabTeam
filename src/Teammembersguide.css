@@ -1,0 +1,86 @@
+/* Ensure full height for the body */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Full height for body and html */
+  }
+  
+  body {
+    padding-top: 80px; /* Adjust if there's a fixed navbar at the top */
+  }
+  
+  /* Guide Container */
+  .guide-container {
+    margin-top: 30rem;
+
+    padding: 20px;
+    min-height: 100vh; /* Make sure the container covers the full height of the viewport */
+    overflow-y: auto; /* Allow vertical scrolling */
+  }
+  .guide-container3 {
+    margin-top: 20rem;
+
+    padding: 20px;
+    min-height: 100vh; /* Make sure the container covers the full height of the viewport */
+    overflow-y: auto; /* Allow vertical scrolling */
+  }
+  .guide-container2 {
+    padding: 20px;
+    margin-top: 170rem;
+    min-height: 100vh; /* Make sure the container covers the full height of the viewport */
+    overflow-y: auto; /* Allow vertical scrolling */
+  }
+  
+  .image-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 2rem; /* Add some space at the bottom */
+  }
+  
+  .guide-image {
+    max-width: 45%;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  /* Add some padding to the bottom of the page to ensure full content visibility */
+  .guide-container::after {
+    content: '';
+    display: block;
+    height: 50px; /* Adds space at the bottom to avoid content being cut off */
+  }
+  
+
+.guide-header {
+    text-align: center;
+    font-size: 2rem;
+    color: #00427c;
+}
+
+.guide-paragraph {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    color: #00427c;
+    font-weight: bold;
+    margin: 3rem;
+
+}
+
+.guide-list {
+    font-size: 1.2rem;
+    margin-left: 20px;
+    margin-bottom: 30px;
+    color: #00427c;
+}
+
+.guide-list li {
+    margin-bottom: 10px;
+}
+
+/* Image container for desktop */
+
+/* Responsive adjustments */
+

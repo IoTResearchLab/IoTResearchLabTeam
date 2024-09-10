@@ -212,7 +212,7 @@ function UpdateProject() {
             />
           </div>
           <div>
-            <label>Slug (Required):</label>
+            <label>Route (Required):</label>
             <input
               type="text"
               value={slug}
@@ -289,7 +289,7 @@ function UpdateProject() {
           </div>
 
           <div>
-            <label>Paragraphs:</label>
+            <label>Sections:</label>
             {paragraphs.map((paragraph, index) => (
               <div key={index} className="paragraph-section">
                 <div>
@@ -322,10 +322,10 @@ function UpdateProject() {
                     />
                   )}
                 </div>
-                <button type="button" onClick={() => handleRemoveParagraph(index)}>Remove Paragraph</button>
+                <button type="button" onClick={() => handleRemoveParagraph(index)}>Remove Section</button>
               </div>
             ))}
-            <button type="button" onClick={handleAddParagraph}>Add Paragraph</button>
+            <button type="button" onClick={handleAddParagraph}>Add Section</button>
           </div>
 
           <button type="submit" disabled={uploading}>
