@@ -1,86 +1,171 @@
 /* Ensure full height for the body */
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%; /* Full height for body and html */
-  }
-  
-  body {
-    padding-top: 80px; /* Adjust if there's a fixed navbar at the top */
-  }
-  
-  /* Guide Container */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  padding-top: 80px; /* Adjust if there's a fixed navbar at the top */
+}
+
+/* Guide Container */
+.guide-container,
+.guide-container2,
+.guide-container3 {
+  padding: 20px;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* Responsive margin-top values for different screen sizes */
+.guide-container {
+  margin-top: 30rem;
+}
+
+.guide-container2 {
+  margin-top: 170rem;
+}
+
+.guide-container3 {
+  margin-top: 20rem;
+}
+
+/* Adjust margin-top for smaller screens */
+@media (max-width: 1050px) {
   .guide-container {
-    margin-top: 30rem;
-
-    padding: 20px;
-    min-height: 100vh; /* Make sure the container covers the full height of the viewport */
-    overflow-y: auto; /* Allow vertical scrolling */
-  }
-  .guide-container3 {
-    margin-top: 20rem;
-
-    padding: 20px;
-    min-height: 100vh; /* Make sure the container covers the full height of the viewport */
-    overflow-y: auto; /* Allow vertical scrolling */
+      margin-top: 35rem;
   }
   .guide-container2 {
-    padding: 20px;
-    margin-top: 170rem;
-    min-height: 100vh; /* Make sure the container covers the full height of the viewport */
-    overflow-y: auto; /* Allow vertical scrolling */
+      margin-top: 150rem;
   }
-  
-  .image-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-bottom: 2rem; /* Add some space at the bottom */
+  .guide-container3 {
+      margin-top: 25rem;
   }
-  
+}
+@media (max-width: 768px) {
+  .guide-container {
+      margin-top: 35rem;
+  }
+  .guide-container2 {
+      margin-top: 190rem;
+  }
+  .guide-container3 {
+      margin-top: 25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .guide-container {
+      margin-top: 45rem;
+  }
+  .guide-container2 {
+      margin-top: 185rem;
+  }
+  .guide-container3 {
+      margin-top: 25rem;
+  }
+}
+
+/* Image Container */
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+/* Guide Image */
+.guide-image {
+  max-width: 45%;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* Full width for images on smaller screens */
+@media (max-width: 768px) {
   .guide-image {
-    max-width: 45%;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+      max-width: 70%;
   }
-  
-  /* Add some padding to the bottom of the page to ensure full content visibility */
-  .guide-container::after {
-    content: '';
-    display: block;
-    height: 50px; /* Adds space at the bottom to avoid content being cut off */
-  }
-  
+}
 
+@media (max-width: 480px) {
+  .guide-image {
+      max-width: 100%;
+  }
+}
+
+/* Add padding to the bottom of the page to ensure full content visibility */
+.guide-container::after {
+  content: '';
+  display: block;
+  height: 50px; /* Adds space at the bottom to avoid content being cut off */
+}
+
+/* Guide Header */
 .guide-header {
-    text-align: center;
-    font-size: 2rem;
-    color: #00427c;
+  text-align: center;
+  font-size: 2rem;
+  color: #00427c;
 }
 
+@media (max-width: 768px) {
+  .guide-header {
+      font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .guide-header {
+      font-size: 1.2rem;
+  }
+}
+
+/* Guide Paragraph */
 .guide-paragraph {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    color: #00427c;
-    font-weight: bold;
-    margin: 3rem;
-
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  color: #00427c;
+  font-weight: bold;
+  margin: 3rem;
 }
 
+@media (max-width: 768px) {
+  .guide-paragraph {
+      font-size: 1rem;
+      margin: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .guide-paragraph {
+      font-size: 0.9rem;
+      margin: 1.5rem;
+  }
+}
+
+/* Guide List */
 .guide-list {
-    font-size: 1.2rem;
-    margin-left: 20px;
-    margin-bottom: 30px;
-    color: #00427c;
+  font-size: 1.2rem;
+  margin-left: 20px;
+  margin-bottom: 30px;
+  color: #00427c;
 }
 
 .guide-list li {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
-/* Image container for desktop */
+@media (max-width: 768px) {
+  .guide-list {
+      font-size: 1rem;
+  }
+}
 
-/* Responsive adjustments */
-
+@media (max-width: 480px) {
+  .guide-list {
+      font-size: 0.9rem;
+  }
+}
