@@ -1,71 +1,80 @@
-/* Container for the update publication form */
-.update-publication-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Headings */
-  .update-publication-container h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #00427c;
-  }
-  
-  /* Form labels */
-  .update-publication-container label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  /* Form inputs and textareas */
-  .update-publication-container input[type="text"],
-  .update-publication-container input[type="number"],
-  .update-publication-container select {
-    width: 100%;
+/* Container for the form submissions */
+.submission-preview-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+.submission-preview-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #00427c;
+}
+
+/* Table styling */
+.submission-preview-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.submission-preview-container th,
+.submission-preview-container td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  color: #00427c;
+}
+
+.submission-preview-container th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Link styling */
+.submission-preview-container a {
+  color: #00427c;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.submission-preview-container a:hover {
+  text-decoration: underline;
+}
+
+/* Button styling (if needed for other actions) */
+.submission-preview-container button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: #00427c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submission-preview-container button:hover {
+  background-color: grey;
+}
+
+/* Responsive behavior */
+@media (max-width: 600px) {
+  .submission-preview-container {
     padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    color: #00427c
   }
-  
-  /* Button styles */
-  .update-publication-container button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    background-color: #00427c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
+
+  .submission-preview-container h2 {
+    font-size: 20px;
   }
-  
-  .update-publication-container button:hover {
-    background-color: grey;
+
+  .submission-preview-container button {
+    width: 100%;
+    margin: 10px 0;
   }
-  
-  /* Responsive behavior */
-  @media (max-width: 600px) {
-    .update-publication-container {
-      padding: 10px;
-    }
-  
-    .update-publication-container h3 {
-      font-size: 20px;
-    }
-  
-    .update-publication-container button {
-      width: 100%;
-      margin: 10px 0;
-    }
-  }
-  
+}

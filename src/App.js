@@ -16,6 +16,7 @@ import Guides from './Guides';
 import Teammembersguide from './Teammembersguide';
 import Publicationsguide from './Publicationsguide';
 import Projectsguide from './Projectsguide';
+import Joinus from './Joinus';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,6 +43,7 @@ function App() {
             <Route path="/add-project" element={<AddProject />} />
             <Route path="/update-project" element={<UpdateProject />} /> 
             <Route path="/guides" element={<Guides/>}/>
+            <Route path='/join-us' element={<Joinus/>}/>
             <Route path="/team-members-guide" element={<Teammembersguide/>}/>
             <Route path="/publications-guide" element={<Publicationsguide/>}/>
             <Route path="/projects-guide" element={<Projectsguide/>}/>

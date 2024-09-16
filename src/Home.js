@@ -21,6 +21,9 @@ const Home = () => {
         <Link to="/guides">
           <button className="home-button">Guides</button>
         </Link>
+        <Link to="/join-us">
+          <button className="home-button">Form submissions</button>
+        </Link>
       </div>
     </div>
   );

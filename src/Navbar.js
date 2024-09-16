@@ -35,6 +35,8 @@ const Navbar = () => {
         </li>
         <li>
           <Link to="/guides" onClick={() => setMenuOpen(false)}>Guides</Link>
+        </li> <li>
+          <Link to="/join-us" onClick={() => setMenuOpen(false)}>Form submissions</Link>
         </li>
       </ul>
     </nav>
